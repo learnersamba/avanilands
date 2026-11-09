@@ -1,0 +1,14 @@
+# Root ignores. web/ and admin/ have their own .gitignore files too.
+.DS_Store
+*.log
+.env*
+!.env.example
+
+# Supabase local state
+supabase/.branches
+supabase/.temp
+
+# Editors
+.vscode/*
+!.vscode/extensions.json
+.idea/

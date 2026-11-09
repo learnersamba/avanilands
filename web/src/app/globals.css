@@ -1,0 +1,55 @@
+@import "tailwindcss";
+
+/* Placeholder brand palette (docs/03-design.md §2) until the final branding. */
+@theme {
+  --color-forest: #1f4d3a;
+  --color-forest-dark: #163a2b;
+  --color-forest-light: #2d6a50;
+  --color-sand: #c8a15a;
+  --color-sand-light: #efe3c8;
+  /* Gold dark enough for small text on light backgrounds (WCAG AA). */
+  --color-sand-dark: #866326;
+  --color-paper: #faf8f3;
+  --color-ink: #1e2422;
+  --color-muted: #5b6770;
+  --color-line: #e4dfd3;
+
+  /* Status: sold is a success, so never red. */
+  --color-available: #2e7d4f;
+  --color-reserved: #96600f;
+  --color-sold: #5b6770;
+
+  --font-sans: var(--font-inter), ui-sans-serif, system-ui, sans-serif;
+  --font-serif: var(--font-fraunces), ui-serif, Georgia, serif;
+}
+
+body {
+  background: var(--color-paper);
+  color: var(--color-ink);
+  font-family: var(--font-sans);
+}
+
+/* Faint survey-map contour lines, used behind dark sections. */
+.bg-contours {
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='600' height='400' viewBox='0 0 600 400'%3E%3Cg fill='none' stroke='%23c8a15a' stroke-opacity='0.16' stroke-width='1.2'%3E%3Cpath d='M-20 320 C 80 260 160 300 240 250 S 420 160 620 210'/%3E%3Cpath d='M-20 290 C 90 230 170 270 250 220 S 430 130 620 180'/%3E%3Cpath d='M-20 260 C 100 200 180 240 260 190 S 440 100 620 150'/%3E%3Cpath d='M-20 230 C 110 170 190 210 270 160 S 450 70 620 120'/%3E%3Cpath d='M-20 360 C 70 300 150 340 230 290 S 410 200 620 250'/%3E%3Cpath d='M-20 390 C 60 330 140 370 220 320 S 400 230 620 280'/%3E%3Cellipse cx='470' cy='300' rx='60' ry='26'/%3E%3Cellipse cx='470' cy='300' rx='100' ry='46'/%3E%3Cellipse cx='120' cy='90' rx='50' ry='22'/%3E%3Cellipse cx='120' cy='90' rx='90' ry='40'/%3E%3C/g%3E%3C/svg%3E");
+  background-size: 600px 400px;
+}
+
+:focus-visible {
+  outline: 3px solid var(--color-sand);
+  outline-offset: 2px;
+}
+
+details > summary {
+  list-style: none;
+}
+details > summary::-webkit-details-marker {
+  display: none;
+}
+
+/* Property pages have their own Call / WhatsApp / Enquire bar on phones. */
+@media (max-width: 1023px) {
+  body:has(#property-action-bar) .whatsapp-float {
+    display: none;
+  }
+}

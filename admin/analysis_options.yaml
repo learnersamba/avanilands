@@ -1,0 +1,21 @@
+include: package:flutter_lints/flutter.yaml
+
+plugins:
+  riverpod_lint: ^3.2.0
+
+analyzer:
+  exclude:
+    - build/**
+    - web/**
+    - "**/*.g.dart"
+    - "**/*.freezed.dart"
+  errors:
+    invalid_annotation_target: ignore
+
+linter:
+  rules:
+    prefer_single_quotes: true
+    require_trailing_commas: true
+    always_declare_return_types: true
+    prefer_const_constructors: true
+    avoid_print: true
