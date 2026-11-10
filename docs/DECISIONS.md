@@ -135,7 +135,7 @@ Every confirmed decision is recorded here. Read this before starting any phase.
 | 126 | 2026-11-09 | ✅ | **No more admin roles (Phase 18 dropped).** The panel keeps two roles: Super Admin (settings, admin users, website content, approving bookings) and Admin (everything else) | Owner's decision: a small team doesn't need more |
 | 127 | 2026-11-09 | ✅ | Metadata goes in `<head>` for **crawlers and link previews** (Next.js's list plus Googlebot); people's browsers get it streamed | Blocking metadata for every visitor stopped Next.js from building a static first view of /land and property pages ("did not produce a static shell" in development). Google still sees canonical links and noindex in `<head>` |
 | 128 | 2026-11-09 | ✅ | Final name **Avanilands**, a brand of **Tirupa Technologies Pvt. Ltd.**, "Real Estate & Property Platform". Tagline **"Find Your Space. Build Your Future."** Property codes are now `AL-0001`; references (ENQ-, SV-, BKG-) unchanged. The tagline and parent company show in the website footer | Owner's brand decision. Later categories (apartments, villas, houses, commercial, developments) are a future direction only; the platform still sells land |
-| 129 | 2026-11-09 | ✅ | Code lives in the git repository **JonnadaRaju/Avanilands** on GitHub, branch `main` | Name fixed, so git can start (it was held back until then) |
+| 129 | 2026-11-09 | ✅ | Code lives in the git repository **learnersamba/avanilands** on GitHub, branch `main` (it was first pushed to JonnadaRaju/Avanilands by mistake; that copy is not used) | Name fixed, so git can start (it was held back until then) |
 
 ## Open questions for the owner
 

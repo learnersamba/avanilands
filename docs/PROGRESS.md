@@ -4,7 +4,7 @@ Status key: ⬜ not started · 🟡 in progress · ✅ done · ⏸ blocked / wai
 
 | Phase | File | Status | Started | Finished | Notes |
 |-------|------|--------|---------|----------|-------|
-| 0 | [Setup](phases/phase-00-setup.md) | ✅ | 2026-11-08 | 2026-11-08 | Ports 3100 / 3101 / 564xx; git: JonnadaRaju/Avanilands |
+| 0 | [Setup](phases/phase-00-setup.md) | ✅ | 2026-11-08 | 2026-11-08 | Ports 3100 / 3101 / 564xx; git: learnersamba/avanilands |
 | 1 | [Database, security, seed](phases/phase-01-database.md) | ✅ | 2026-11-08 | 2026-11-08 | 105 pgTAP checks pass |
 | 2 | [Admin: login, shell, dashboard](phases/phase-02-admin-foundation.md) | ✅ | 2026-11-08 | 2026-11-08 | Invite flow tested end to end |
 | 3 | [Admin: properties + lookups](phases/phase-03-admin-properties.md) | ✅ | 2026-11-08 | 2026-11-08 | Full status lifecycle tested in Chrome |
@@ -25,8 +25,9 @@ Status key: ⬜ not started · 🟡 in progress · ✅ done · ⏸ blocked / wai
 
 ## Log
 <!-- Newest first. One entry per working session: date, phase, what was done, what is next. -->
+- **2026-11-10**: The GitHub repository is now **learnersamba/avanilands** (decision 129). The code was first pushed to JonnadaRaju/Avanilands by mistake; that copy is not used.
 - **2026-11-10**: Cloud Supabase project **avanilands** (ref `vyfooevrfflmbihmahap`, Mumbai) linked; all 14 migrations pushed (no seed) and the `invite-admin` function deployed. Checked as a visitor: site settings, website content, FAQs and property search answer; properties, enquiries, bookings, admin users, page views and settings tables are closed; storage buckets exist; the invite function refuses calls without a login. Next (owner, in the dashboard): DEPLOY.md §1 steps 3–6 and 9–10 (sign-in settings, email templates, first Super Admin); SMTP, website address and cache refresh wait for the domain.
-- **2026-11-09**: Renamed to **Avanilands** (a brand of Tirupa Technologies Pvt. Ltd.; decisions 128–129). Name, admin package, emails, test logins (`@avanilands.test`), local Supabase project (`avanilands`) and property codes (`AL-0001`) all changed; tagline and parent company in the website footer. All tests, security check and production build pass. First commit pushed to GitHub (JonnadaRaju/Avanilands).
+- **2026-11-09**: Renamed to **Avanilands** (a brand of Tirupa Technologies Pvt. Ltd.; decisions 128–129). Name, admin package, emails, test logins (`@avanilands.test`), local Supabase project (`avanilands`) and property codes (`AL-0001`) all changed; tagline and parent company in the website footer. All tests, security check and production build pass. First commit pushed to GitHub (now learnersamba/avanilands).
 - **2026-11-09**: Fixed the development error "Route /land did not produce a static shell" (and the older /land/[slug] instant-validation warning). Cause: metadata was forced into `<head>` for every visitor; now only for crawlers and link previews (decision 127). Googlebot still gets canonical / noindex in `<head>`; browsers keep correct titles. Website tests, lint and production build pass.
 - **2026-11-09**: Owner dropped Phase 18 (more admin roles); the two roles stay (decision 126). All planned build phases are now done or set aside; what is left is the owner's launch list in Phase 9.
 - **2026-11-09**: Owner postponed Phase 17 (online payments); payments stay offline and are recorded in Bookings (decision 125).

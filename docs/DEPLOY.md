@@ -65,7 +65,7 @@ OpenStreetMap's own servers are not for public website traffic. Create a free ac
 
 ## 5. Website on Vercel
 
-1. **(owner)** Vercel project → import the repository (`JonnadaRaju/Avanilands` on GitHub) with **Root Directory** `web`. Production needs the **Pro plan** (Hobby is non-commercial only, decision 27).
+1. **(owner)** Vercel project → import the repository (`learnersamba/avanilands` on GitHub) with **Root Directory** `web`. Production needs the **Pro plan** (Hobby is non-commercial only, decision 27).
 2. **Environment variables** (Production; and Preview for staging, with the staging values):
 
    | Name | Value |
