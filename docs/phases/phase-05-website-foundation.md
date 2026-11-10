@@ -6,7 +6,7 @@
 ## Checklist
 ### Design first
 - [x] Clickable prototype of Home, Explore, Property details (desktop + mobile) following [03-design.md](../03-design.md)
-- [x] **Owner approves the design** (decision 48, 2026-11-08) — screenshots in `docs/design-review/`
+- [x] **Owner approves the design** (decision 48, 2026-11-08)
 
 ### Foundation
 - [x] Tailwind theme tokens (colours, fonts, spacing, radius), fonts via `next/font`

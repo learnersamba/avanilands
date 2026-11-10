@@ -1,6 +1,6 @@
 @import "tailwindcss";
 
-/* Placeholder brand palette (docs/03-design.md §2) until the final branding. */
+/* Brand palette (docs/03-design.md §2). */
 @theme {
   --color-forest: #1f4d3a;
   --color-forest-dark: #163a2b;

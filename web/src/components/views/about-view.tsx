@@ -2,7 +2,7 @@ import { ContactBand } from "@/components/contact-band";
 import { contentIcons } from "@/components/icons";
 import { PageHero } from "@/components/page-hero";
 import { Container, SectionHeading } from "@/components/ui";
-import { paragraphs, type SiteContent } from "@/lib/content";
+import { isPlaceholder, paragraphs, type SiteContent } from "@/lib/content";
 import { storageUrl } from "@/lib/media";
 
 export function AboutView({ content }: { content: SiteContent }) {
@@ -23,19 +23,22 @@ export function AboutView({ content }: { content: SiteContent }) {
               className="aspect-[16/9] w-full rounded-2xl object-cover"
             />
           )}
-          {paragraphs(about.intro).map((text) => (
-            <p key={text}>{text}</p>
-          ))}
+          {!isPlaceholder(about.intro) &&
+            paragraphs(about.intro).map((text) => <p key={text}>{text}</p>)}
         </div>
         <div className="space-y-4">
-          <div className="rounded-2xl bg-white p-6 ring-1 ring-line">
-            <h2 className="font-serif text-xl text-forest">Our mission</h2>
-            <p className="mt-2 text-ink/80">{about.mission}</p>
-          </div>
-          <div className="rounded-2xl bg-white p-6 ring-1 ring-line">
-            <h2 className="font-serif text-xl text-forest">Our vision</h2>
-            <p className="mt-2 text-ink/80">{about.vision}</p>
-          </div>
+          {!isPlaceholder(about.mission) && (
+            <div className="rounded-2xl bg-white p-6 ring-1 ring-line">
+              <h2 className="font-serif text-xl text-forest">Our mission</h2>
+              <p className="mt-2 text-ink/80">{about.mission}</p>
+            </div>
+          )}
+          {!isPlaceholder(about.vision) && (
+            <div className="rounded-2xl bg-white p-6 ring-1 ring-line">
+              <h2 className="font-serif text-xl text-forest">Our vision</h2>
+              <p className="mt-2 text-ink/80">{about.vision}</p>
+            </div>
+          )}
         </div>
       </Container>
 

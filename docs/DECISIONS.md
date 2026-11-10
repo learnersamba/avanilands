@@ -54,7 +54,7 @@ Every confirmed decision is recorded here. Read this before starting any phase.
 | 45 | 2026-11-08 | ✅ | Photos, videos and documents save immediately (no "Save changes") | Uploads are real files; holding them until a form save would risk losing them |
 | 46 | 2026-11-08 | ✅ | Uploads use the Storage API directly from the browser to show progress | The Supabase SDK has no progress; limits and permissions are still enforced by Storage |
 | 47 | 2026-11-08 | ✅ | Location cover photos: one 1600 px WebP each, in the public `site-assets` bucket | Used as banners on location pages; one size is enough |
-| 48 | 2026-11-08 | ✅ | Website look: forest green + sand gold, Fraunces + Inter, survey-map contour pattern instead of stock photos | **Approved by the owner** (screenshots in docs/design-review/) |
+| 48 | 2026-11-08 | ✅ | Website look: forest green + sand gold, Fraunces + Inter, survey-map contour pattern instead of stock photos | **Approved by the owner** (screenshots removed later) |
 | 49 | 2026-11-08 | ✅ | Listing filters live in the address: `?city=…&type=…&budget=min-max` | Shareable links and Google-friendly landing pages |
 | 50 | 2026-11-08 | ✅ | Website pages are cached for up to an hour; Phase 7 adds instant refresh when an admin saves | Fast pages without hammering the database |
 | 51 | 2026-11-08 | ✅ | Landing pages: `/land-for-sale/<city>` and `/<type>-for-sale/<city>`; filtered `/land` results are not indexed | One clean page per place/type for Google; endless filter combinations stay out of search results |
