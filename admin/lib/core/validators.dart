@@ -36,4 +36,12 @@ abstract final class Validators {
         ? null
         : 'Digits only, with country code (e.g. 919876543210).';
   }
+
+  /// GST number: 15 capital letters or digits (the form upper-cases what is typed).
+  static String? gstNumber(String? value) {
+    if (value == null || value.trim().isEmpty) return null;
+    return RegExp(r'^[0-9A-Za-z]{15}$').hasMatch(value.trim())
+        ? null
+        : 'A GST number has 15 letters and digits.';
+  }
 }

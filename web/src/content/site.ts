@@ -6,8 +6,10 @@
  * for the owner to replace or confirm.
  */
 
+/** Starting values for the brand details; the Super Admin edits them in Settings. */
 export const brand = {
   tagline: "Find Your Space. Build Your Future.",
+  descriptor: "Real Estate & Property Platform",
   parentCompany: "Tirupa Technologies Pvt. Ltd.",
 };
 

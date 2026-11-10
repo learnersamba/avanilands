@@ -45,7 +45,7 @@ What you need before starting:
      select id, 'Full Name', email, 'super_admin' from auth.users where email = 'owner@<domain>';
      ```
    - They sign in at `https://admin.<domain>` and change the password (account menu → Change password). Everyone else is invited from **Admin users** inside the panel.
-10. **Site settings**: the super admin fills in **Settings** (company name, phone, WhatsApp, email, address, office hours, sales notification emails).
+10. **Site settings**: the super admin fills in **Settings**: brand and company (tagline, line under the logo, legal name, and the registered office address, GST and RERA numbers if known), company name, phone, WhatsApp, email, address, office hours, sales notification emails. The website footer, Contact page and legal pages use these.
 11. Copy from **Project Settings → API Keys**: the project URL, the **publishable** key (`sb_publishable_…`) and a **secret** key (`sb_secret_…`). The secret key bypasses every rule: it goes only into Vercel's server settings and the password manager.
 
 ## 2. Cloudflare Turnstile (bot check)

@@ -3,7 +3,7 @@ import Link from "next/link";
 
 import { Logo } from "@/components/site-header";
 import { Container } from "@/components/ui";
-import { brand } from "@/content/site";
+import { registrations, withoutFinalDot } from "@/components/company-details";
 import { getLocations, getSiteSettings } from "@/lib/data";
 import { digits } from "@/lib/format";
 
@@ -13,8 +13,8 @@ export async function SiteFooter() {
     <footer className="bg-contours bg-forest-dark text-white/80">
       <Container className="grid gap-10 py-14 sm:grid-cols-2 lg:grid-cols-4">
         <div className="space-y-4">
-          <Logo light name={settings.company_name} />
-          <p className="font-serif text-base text-sand">{brand.tagline}</p>
+          <Logo light name={settings.company_name} descriptor={settings.descriptor} />
+          <p className="font-serif text-base text-sand">{settings.tagline}</p>
           <p className="text-sm leading-relaxed">
             Verified land sold directly by {settings.company_name}. We own every property we list — no brokers, no
             third-party sellers.
@@ -72,9 +72,14 @@ export async function SiteFooter() {
       </Container>
       <div className="border-t border-white/10">
         <Container className="flex flex-col gap-3 py-6 text-xs text-white/60 sm:flex-row sm:items-center sm:justify-between">
-          <p>
-            © {settings.company_name}, a brand of {brand.parentCompany.replace(/\.$/, "")}. All rights reserved.
-          </p>
+          <div className="space-y-1">
+            <p>
+              © {settings.company_name}, a brand of {withoutFinalDot(settings.legal_name)}. All rights reserved.
+            </p>
+            {registrations(settings).length > 0 && (
+              <p>{registrations(settings).map(([label, value]) => `${label}: ${value}`).join(" · ")}</p>
+            )}
+          </div>
           <nav aria-label="Legal" className="flex gap-5">
             <Link href="/terms" className="inline-block py-1.5 hover:text-sand">Terms</Link>
             <Link href="/privacy" className="inline-block py-1.5 hover:text-sand">Privacy</Link>

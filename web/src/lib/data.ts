@@ -11,7 +11,7 @@ import {
   type SiteContent,
   type Testimonial,
 } from "@/lib/content";
-
+import { brand } from "@/content/site";
 import type { AreaUnit, Availability } from "@/lib/format";
 import type { SearchArgs } from "@/lib/listing";
 import { createPublicClient } from "@/lib/supabase/public";
@@ -87,6 +87,14 @@ export type PropertyCardData = Omit<
 
 export type SiteSettings = {
   company_name: string;
+  /** The registered company that owns the brand, e.g. "Tirupa Technologies Pvt. Ltd.". */
+  legal_name: string;
+  tagline: string;
+  /** The line under the logo, e.g. "Real Estate & Property Platform". */
+  descriptor: string;
+  registered_address: string | null;
+  gst_number: string | null;
+  rera_number: string | null;
   phone: string | null;
   whatsapp: string | null;
   email: string | null;
@@ -118,6 +126,12 @@ export type PropertyType = { id: number; name: string; slug: string; seo_slug: s
 
 const fallbackSettings: SiteSettings = {
   company_name: "Avanilands",
+  legal_name: brand.parentCompany,
+  tagline: brand.tagline,
+  descriptor: brand.descriptor,
+  registered_address: null,
+  gst_number: null,
+  rera_number: null,
   phone: null,
   whatsapp: null,
   email: null,

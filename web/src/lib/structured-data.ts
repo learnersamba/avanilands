@@ -5,6 +5,9 @@
 
 type Settings = {
   company_name: string;
+  legal_name?: string;
+  tagline?: string;
+  gst_number?: string | null;
   phone: string | null;
   email: string | null;
   address: string | null;
@@ -16,6 +19,9 @@ export function organizationJsonLd(settings: Settings, siteUrl: string) {
     "@context": "https://schema.org",
     "@type": "RealEstateAgent",
     name: settings.company_name,
+    ...(settings.legal_name && { legalName: settings.legal_name }),
+    ...(settings.tagline && { slogan: settings.tagline }),
+    ...(settings.gst_number && { taxID: settings.gst_number }),
     url: siteUrl,
     ...(settings.phone && { telephone: settings.phone }),
     ...(settings.email && { email: settings.email }),

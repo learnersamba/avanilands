@@ -1,14 +1,17 @@
+import { CompanyDetails } from "@/components/company-details";
 import { PageHero } from "@/components/page-hero";
 import { Container } from "@/components/ui";
 import { type LegalContent, paragraphs } from "@/lib/content";
+import { getSiteSettings } from "@/lib/data";
 
-export function LegalPage({
+export async function LegalPage({
   content,
   path,
 }: {
   content: LegalContent;
   path: string;
 }) {
+  const settings = await getSiteSettings();
   return (
     <>
       <PageHero
@@ -36,6 +39,10 @@ export function LegalPage({
             </section>
           ))}
         </div>
+        <CompanyDetails
+          settings={settings}
+          className="mt-12 border-t border-line pt-6 text-ink/70"
+        />
       </Container>
     </>
   );

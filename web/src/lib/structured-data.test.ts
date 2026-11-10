@@ -62,6 +62,29 @@ describe("property structured data", () => {
     );
     expect(data).not.toHaveProperty("telephone");
     expect(data).not.toHaveProperty("sameAs");
+    expect(data).not.toHaveProperty("taxID");
+  });
+
+  it("organisation names the company behind the brand", () => {
+    const data = organizationJsonLd(
+      {
+        company_name: "Avanilands",
+        legal_name: "Tirupa Technologies Pvt. Ltd.",
+        tagline: "Find Your Space. Build Your Future.",
+        gst_number: "37ABCDE1234F1Z5",
+        phone: null,
+        email: null,
+        address: null,
+        social_links: {},
+      },
+      "https://x",
+    );
+    expect(data).toMatchObject({
+      name: "Avanilands",
+      legalName: "Tirupa Technologies Pvt. Ltd.",
+      slogan: "Find Your Space. Build Your Future.",
+      taxID: "37ABCDE1234F1Z5",
+    });
   });
 
   it("text cannot close the script tag", () => {

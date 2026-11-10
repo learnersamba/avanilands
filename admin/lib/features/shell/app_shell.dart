@@ -9,6 +9,7 @@ import '../dashboard/dashboard_repository.dart';
 import '../enquiries/enquiry_alerts.dart';
 import '../notifications/notifications_repository.dart';
 import '../properties/properties_repository.dart';
+import '../../core/widgets/brand_mark.dart';
 import '../../core/widgets/common.dart';
 
 class _NavItem {
@@ -145,15 +146,16 @@ class _Sidebar extends StatelessWidget {
                     ? MainAxisAlignment.center
                     : MainAxisAlignment.start,
                 children: [
-                  const Icon(Icons.landscape_outlined, color: BrandColors.sand),
+                  const BrandMark(size: 32, onDark: true),
                   if (!compact) ...[
                     const SizedBox(width: 10),
                     const Text(
-                      'Avanilands',
+                      'AVANILANDS',
                       style: TextStyle(
                         color: Colors.white,
-                        fontSize: 18,
+                        fontSize: 16,
                         fontWeight: FontWeight.w700,
+                        letterSpacing: 1.8,
                       ),
                     ),
                   ],

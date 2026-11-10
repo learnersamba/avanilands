@@ -20,7 +20,7 @@ class SettingsPage extends ConsumerWidget {
       children: [
         const PageHeader(
           title: 'Settings',
-          subtitle: 'Contact details shown on the website, and where enquiry alerts go.',
+          subtitle: 'Brand, company and contact details shown on the website, and where enquiry alerts go.',
         ),
         AsyncValueView(
           value: ref.watch(siteSettingsProvider),
@@ -50,6 +50,18 @@ class _SettingsFormState extends ConsumerState<_SettingsForm> {
   late final _company = TextEditingController(
     text: widget.settings.companyName,
   );
+  late final _legalName = TextEditingController(
+    text: widget.settings.legalName,
+  );
+  late final _tagline = TextEditingController(text: widget.settings.tagline);
+  late final _descriptor = TextEditingController(
+    text: widget.settings.descriptor,
+  );
+  late final _registeredAddress = TextEditingController(
+    text: widget.settings.registeredAddress,
+  );
+  late final _gst = TextEditingController(text: widget.settings.gstNumber);
+  late final _rera = TextEditingController(text: widget.settings.reraNumber);
   late final _phone = TextEditingController(text: widget.settings.phone);
   late final _whatsapp = TextEditingController(text: widget.settings.whatsapp);
   late final _email = TextEditingController(text: widget.settings.email);
@@ -79,6 +91,12 @@ class _SettingsFormState extends ConsumerState<_SettingsForm> {
   void dispose() {
     for (final controller in [
       _company,
+      _legalName,
+      _tagline,
+      _descriptor,
+      _registeredAddress,
+      _gst,
+      _rera,
       _phone,
       _whatsapp,
       _email,
@@ -133,6 +151,12 @@ class _SettingsFormState extends ConsumerState<_SettingsForm> {
           .save(
             SiteSettings(
               companyName: _company.text.trim(),
+              legalName: _legalName.text.trim(),
+              tagline: _tagline.text.trim(),
+              descriptor: _descriptor.text.trim(),
+              registeredAddress: _text(_registeredAddress),
+              gstNumber: _text(_gst)?.toUpperCase(),
+              reraNumber: _text(_rera),
               phone: _text(_phone),
               whatsapp: _text(_whatsapp),
               email: _text(_email)?.toLowerCase(),
@@ -222,6 +246,77 @@ class _SettingsFormState extends ConsumerState<_SettingsForm> {
                     hintText: 'Mon–Sat, 9:30 am – 6:30 pm',
                   ),
                   validator: (value) => Validators.maxLength(value, 120),
+                ),
+              ],
+            ),
+          ),
+          const SizedBox(height: 24),
+          SectionCard(
+            title: 'Brand and company',
+            child: Column(
+              children: [
+                TextFormField(
+                  controller: _tagline,
+                  decoration: const InputDecoration(
+                    labelText: 'Tagline',
+                    helperText:
+                        'Shown in the website footer and in link previews.',
+                  ),
+                  validator: (value) =>
+                      Validators.required(value, field: 'Tagline') ??
+                      Validators.maxLength(value, 80),
+                ),
+                gap,
+                TextFormField(
+                  controller: _descriptor,
+                  decoration: const InputDecoration(
+                    labelText: 'Line under the logo',
+                    helperText: 'For example: Real Estate & Property Platform.',
+                  ),
+                  validator: (value) =>
+                      Validators.required(value, field: 'This line') ??
+                      Validators.maxLength(value, 60),
+                ),
+                gap,
+                TextFormField(
+                  controller: _legalName,
+                  decoration: const InputDecoration(
+                    labelText: 'Legal company name',
+                    helperText: 'The registered company that owns the brand.',
+                  ),
+                  validator: (value) =>
+                      Validators.required(value, field: 'Legal company name') ??
+                      Validators.maxLength(value, 120),
+                ),
+                gap,
+                TextFormField(
+                  controller: _registeredAddress,
+                  decoration: const InputDecoration(
+                    labelText: 'Registered office address',
+                    helperText:
+                        'Optional. Shown on the Contact and legal pages.',
+                  ),
+                  maxLines: 2,
+                  validator: (value) => Validators.maxLength(value, 300),
+                ),
+                gap,
+                TextFormField(
+                  controller: _gst,
+                  decoration: const InputDecoration(
+                    labelText: 'GST number',
+                    helperText: 'Optional. 15 letters and digits.',
+                  ),
+                  textCapitalization: TextCapitalization.characters,
+                  validator: Validators.gstNumber,
+                ),
+                gap,
+                TextFormField(
+                  controller: _rera,
+                  decoration: const InputDecoration(
+                    labelText: 'RERA registration number',
+                    helperText: 'Optional. Shown in the footer when filled in.',
+                  ),
+                  validator: (value) => Validators.maxLength(value, 60),
                 ),
               ],
             ),

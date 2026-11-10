@@ -1,7 +1,8 @@
-import { Clock, Mail, MapPin, MessageCircle, Phone } from "lucide-react";
+import { Building2, Clock, Mail, MapPin, MessageCircle, Phone } from "lucide-react";
 import type { Metadata } from "next";
 import type { ReactNode } from "react";
 
+import { CompanyDetails } from "@/components/company-details";
 import { EnquiryForm } from "@/components/enquiry/enquiry-form";
 import { PageHero } from "@/components/page-hero";
 import { ButtonAnchor, Container } from "@/components/ui";
@@ -57,6 +58,9 @@ export default async function ContactPage() {
               {settings.office_hours}
             </ContactRow>
           )}
+          <ContactRow icon={<Building2 />} title="Company">
+            <CompanyDetails settings={settings} />
+          </ContactRow>
         </div>
 
         <div className="rounded-2xl bg-white p-6 shadow-sm ring-1 ring-line sm:p-8">

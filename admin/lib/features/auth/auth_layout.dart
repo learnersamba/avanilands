@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 
 import '../../core/theme.dart';
+import '../../core/widgets/brand_mark.dart';
 
 /// Centered card used by the sign-in, reset and set-password screens.
 class AuthLayout extends StatelessWidget {
@@ -27,7 +28,7 @@ class AuthLayout extends StatelessWidget {
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.stretch,
               children: [
-                const _BrandMark(),
+                const _Lockup(),
                 const SizedBox(height: 24),
                 Card(
                   child: Padding(
@@ -61,34 +62,36 @@ class AuthLayout extends StatelessWidget {
   }
 }
 
-class _BrandMark extends StatelessWidget {
-  const _BrandMark();
+class _Lockup extends StatelessWidget {
+  const _Lockup();
 
   @override
   Widget build(BuildContext context) {
     return Row(
       mainAxisAlignment: MainAxisAlignment.center,
       children: [
-        Container(
-          width: 36,
-          height: 36,
-          decoration: const BoxDecoration(
-            color: BrandColors.forest,
-            shape: BoxShape.circle,
-          ),
-          child: const Icon(
-            Icons.landscape_outlined,
-            color: BrandColors.sand,
-            size: 20,
-          ),
-        ),
+        const BrandMark(),
         const SizedBox(width: 10),
-        Text(
-          'Avanilands Admin',
-          style: Theme.of(context).textTheme.titleLarge?.copyWith(
-            color: BrandColors.forest,
-            fontWeight: FontWeight.w700,
-          ),
+        Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Text(
+              'AVANILANDS',
+              style: Theme.of(context).textTheme.titleLarge?.copyWith(
+                color: BrandColors.forest,
+                fontWeight: FontWeight.w700,
+                letterSpacing: 2,
+                height: 1.1,
+              ),
+            ),
+            Text(
+              'Admin panel',
+              style: Theme.of(context).textTheme.bodySmall?.copyWith(
+                color: BrandColors.ink.withValues(alpha: 0.6),
+                letterSpacing: 0.5,
+              ),
+            ),
+          ],
         ),
       ],
     );

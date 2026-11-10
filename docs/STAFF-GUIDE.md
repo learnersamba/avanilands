@@ -128,7 +128,7 @@ Customers can tap **Compare** on up to 3 properties and see them side by side, i
 ## Super admins only
 
 - **Admin users**: invite people (Admin or Super Admin), change roles, deactivate.
-- **Settings**: company phone, WhatsApp, email, address, office hours, and the **sales notification emails** that receive new enquiries and visit requests. At the bottom, **Site visits**: which days and times customers can book, holidays, and how many days ahead (save with **Save site visit settings**).
+- **Settings** (Super Admin): **Brand and company**: the tagline (footer and link previews), the line under the logo, the legal company name, and optionally the registered office address, **GST number** and **RERA number**. The legal name shows in the footer, on Contact and on the Terms, Privacy and Disclaimer pages; the address and numbers show wherever they are filled in. Then: company phone, WhatsApp, email, address, office hours, and the **sales notification emails** that receive new enquiries and visit requests. At the bottom, **Site visits**: which days and times customers can book, holidays, and how many days ahead (save with **Save site visit settings**).
 - **Locations & lists**: cities, property types and amenities shown in the website filters.
 
 ## Something wrong?

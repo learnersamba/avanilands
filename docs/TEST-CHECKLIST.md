@@ -2,7 +2,7 @@
 
 ✅ tested and passing · 🔁 automated (re-runs with the test suites) · 📱 still to do by hand on real devices · ⏭ not in the MVP (no screen exists yet)
 
-How the automated parts run: `supabase test db` (319 database tests), `cd web && npm test` (81), `cd admin && flutter test` (95), `node tool/security_check.mjs` (62 HTTP checks). Browser checks were done in Chrome (desktop 1440 px and phone 390 px) with Playwright during each phase; results are in each phase file's Notes.
+How the automated parts run: `supabase test db` (330 database tests), `cd web && npm test` (84), `cd admin && flutter test` (98), `node tool/security_check.mjs` (62 HTTP checks). Browser checks were done in Chrome (desktop 1440 px and phone 390 px) with Playwright during each phase; results are in each phase file's Notes.
 
 ## Customer
 
@@ -24,6 +24,7 @@ How the automated parts run: `supabase test db` (319 database tests), `cd web &&
 | Wishlist (saved land) | ✅ 🔁 | Phase 11 journey; owner-only rules tested with a second customer |
 | Comparison | ✅ | Phase 12 flow (phone + desktop, shared link, remove, hidden code) |
 | Page views counted without cookies (bots, Do Not Track, previews skipped) | ✅ 🔁 | Phase 16 check (phone + desktop); unit and database tests |
+| Brand look (logo wordmark and line under it, tagline, favicon, link-preview image) and company details (footer, Contact, legal pages) | ✅ | Browser check on desktop and 375 px phone; edited in admin Settings and seen on the website; 13_brand_settings database tests |
 | Notifications (customer updates, saved-land emails, admin bell) | ✅ 🔁 | Phase 15 journey; 23 database tests |
 | Mobile responsiveness (no sideways scrolling, action bar) | ✅ 📱 | 390 px emulation; real devices below |
 

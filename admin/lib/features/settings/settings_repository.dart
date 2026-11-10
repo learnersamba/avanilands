@@ -3,10 +3,20 @@ import 'package:supabase_flutter/supabase_flutter.dart';
 
 import '../../core/supabase_client.dart';
 
+const defaultLegalName = 'Tirupa Technologies Pvt. Ltd.';
+const defaultTagline = 'Find Your Space. Build Your Future.';
+const defaultDescriptor = 'Real Estate & Property Platform';
+
 /// The single `site_settings` row.
 class SiteSettings {
   const SiteSettings({
     required this.companyName,
+    this.legalName = defaultLegalName,
+    this.tagline = defaultTagline,
+    this.descriptor = defaultDescriptor,
+    this.registeredAddress,
+    this.gstNumber,
+    this.reraNumber,
     this.phone,
     this.whatsapp,
     this.email,
@@ -21,6 +31,12 @@ class SiteSettings {
 
   factory SiteSettings.fromJson(Map<String, dynamic> json) => SiteSettings(
     companyName: json['company_name'] as String,
+    legalName: json['legal_name'] as String? ?? defaultLegalName,
+    tagline: json['tagline'] as String? ?? defaultTagline,
+    descriptor: json['descriptor'] as String? ?? defaultDescriptor,
+    registeredAddress: json['registered_address'] as String?,
+    gstNumber: json['gst_number'] as String?,
+    reraNumber: json['rera_number'] as String?,
     phone: json['phone'] as String?,
     whatsapp: json['whatsapp'] as String?,
     email: json['email'] as String?,
@@ -39,6 +55,12 @@ class SiteSettings {
   );
 
   final String companyName;
+  final String legalName;
+  final String tagline;
+  final String descriptor;
+  final String? registeredAddress;
+  final String? gstNumber;
+  final String? reraNumber;
   final String? phone;
   final String? whatsapp;
   final String? email;
@@ -52,6 +74,12 @@ class SiteSettings {
 
   Map<String, dynamic> toJson() => {
     'company_name': companyName,
+    'legal_name': legalName,
+    'tagline': tagline,
+    'descriptor': descriptor,
+    'registered_address': registeredAddress,
+    'gst_number': gstNumber,
+    'rera_number': reraNumber,
     'phone': phone,
     'whatsapp': whatsapp,
     'email': email,
