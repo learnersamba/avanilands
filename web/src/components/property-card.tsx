@@ -3,7 +3,7 @@ import Link from "next/link";
 
 import { SaveButton } from "@/components/account/save-button";
 import { CompareButton } from "@/components/compare/compare-button";
-import { StatusBadge } from "@/components/ui";
+import { StatusBadge, StatusRibbon } from "@/components/ui";
 import type { PropertyCardData } from "@/lib/data";
 import { formatArea, formatRupeesShort, formatSqft } from "@/lib/format";
 import { mediaUrl } from "@/lib/media";
@@ -21,7 +21,15 @@ export function PropertyCard({
     property.area_unit === "sq_ft" ? null : formatSqft(property.area_sqft);
   const highlight = property.highlights[0];
   return (
-    <article className="group flex flex-col overflow-hidden rounded-2xl border border-line bg-white shadow-sm transition-shadow hover:shadow-lg">
+    <article
+      className={`group flex flex-col overflow-hidden rounded-2xl border bg-white shadow-sm transition-shadow hover:shadow-lg ${
+        property.availability === "sold"
+          ? "border-sold/50 ring-1 ring-sold/30"
+          : property.availability === "reserved"
+            ? "border-reserved/50 ring-1 ring-reserved/30"
+            : "border-line"
+      }`}
+    >
       <div className="relative">
         <Link
           href={`/land/${property.slug}`}
@@ -46,7 +54,8 @@ export function PropertyCard({
               No photo yet
             </div>
           )}
-          <div className="absolute left-3 top-3 flex gap-2">
+          <StatusRibbon status={property.availability} size="sm" />
+          <div className={`absolute top-3 flex gap-2 ${property.availability === "available" ? "left-3" : "left-24"}`}>
             {property.is_featured && (
               <span className="inline-flex items-center gap-1 rounded-full bg-sand px-2.5 py-1 text-[11px] font-semibold uppercase tracking-wide text-forest-dark">
                 <Star className="h-3 w-3 fill-current" aria-hidden /> Featured

@@ -78,14 +78,46 @@ export function ButtonAnchor({
 
 const statusStyles = {
   available: "bg-available text-white",
-  reserved: "bg-reserved text-white",
-  sold: "bg-sold text-white",
+  reserved: "bg-reserved text-white shadow-sm shadow-reserved/40",
+  sold: "bg-sold text-white shadow-sm shadow-sold/40",
 } as const;
 
 export function StatusBadge({ status }: { status: keyof typeof statusStyles }) {
   return (
-    <span className={`rounded-full px-2.5 py-1 text-[11px] font-semibold uppercase tracking-wide ${statusStyles[status]}`}>
+    <span
+      className={`inline-flex items-center gap-1.5 rounded-full px-2.5 py-1 text-[11px] font-semibold uppercase tracking-wide ${statusStyles[status]}`}
+    >
+      {status !== "available" && <span className="h-1.5 w-1.5 rounded-full bg-white" aria-hidden />}
       {status === "available" ? "Available" : status === "reserved" ? "Reserved" : "Sold"}
     </span>
+  );
+}
+
+/** A diagonal "Sold" / "Reserved" band across the top-left corner of a photo. */
+export function StatusRibbon({
+  status,
+  size = "md",
+}: {
+  status: "available" | "reserved" | "sold";
+  size?: "sm" | "md";
+}) {
+  if (status === "available") return null;
+  const band =
+    size === "sm"
+      ? "left-[-38px] top-[18px] w-[140px] py-1 text-[11px]"
+      : "left-[-44px] top-[28px] w-[190px] py-2 text-sm";
+  return (
+    <div
+      className={`pointer-events-none absolute left-0 top-0 z-10 overflow-hidden ${size === "sm" ? "h-24 w-24" : "h-36 w-36"}`}
+      aria-hidden
+    >
+      <div
+        className={`absolute -rotate-45 text-center font-bold uppercase tracking-[0.25em] text-white shadow-lg ${band} ${
+          status === "sold" ? "bg-sold" : "bg-reserved"
+        }`}
+      >
+        {status === "sold" ? "Sold" : "Reserved"}
+      </div>
+    </div>
   );
 }

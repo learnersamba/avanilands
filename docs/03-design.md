@@ -14,7 +14,7 @@ Premium · professional · trustworthy · modern · land-focused · clean · eas
 | Primary colour | Deep forest green `#1F4D3A` — land, growth, stability |
 | Accent | Warm sand gold `#C8A15A` — premium, used sparingly (badges, lines, key buttons) |
 | Background | Soft off-white `#FAF8F3`; white cards; charcoal text `#1E2422` |
-| Status colours | Available green · Reserved amber · Sold slate grey (never red — sold is a success) |
+| Status colours | Available green · Reserved amber · Sold red. Bold, so a buyer sees them at a glance |
 | Headings | Elegant serif (e.g. *Fraunces* or *Playfair Display*) |
 | Body | Clean sans-serif (e.g. *Inter*), 16 px minimum on mobile |
 | Imagery | Large, real aerial/drone and ground photos of our land; no stock-photo people |
@@ -68,7 +68,7 @@ Area always shows the original unit, plus sq ft in brackets. Prices in Indian fo
 - **Title block:** title, location, code, status badge, price (big), per-unit price, negotiable tag; Save and Share icons.
 - **Right sticky panel (desktop) / bottom bar (mobile):** Enquire form, Call, WhatsApp (pre-filled message with property code), Schedule site visit (later).
 - **Sections:** Overview grid (icons) → Highlights → Description → Amenities → Location map (exact pin or approximate circle) + "Get directions" → Nearby places (distance list) → Documents & approvals (approval type and number, public documents to download, "more documents shared during the site visit") → Related properties.
-- **Reserved:** amber banner "This property is reserved — ask us about similar land". **Sold:** grey banner, no form, related properties first.
+- **Reserved:** amber banner "This property is reserved — ask us about similar land". **Sold:** red banner, no form, related properties first. Sold and reserved photos and cards carry a corner ribbon.
 
 ### Other pages
 About (story, mission, vision, values, team photos optional) · Locations (cards per city) · Contact (form, map of office, hours) · FAQ (grouped accordions) · Terms / Privacy / Disclaimer.

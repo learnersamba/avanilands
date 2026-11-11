@@ -15,10 +15,10 @@ abstract final class BrandColors {
   static const sage = Color(0xFFDCEDE3);
   static const text = Color(0xFF17211D);
 
-  // Status colours: sold is a success, so never red.
+  // Status colours, matching the website: bold so they stand out.
   static const available = Color(0xFF2E7D4F);
-  static const reserved = Color(0xFFB7791F);
-  static const sold = Color(0xFF5B6770);
+  static const reserved = Color(0xFFB45309);
+  static const sold = Color(0xFFC0262D);
   static const danger = Color(0xFFB3261E);
 }
 

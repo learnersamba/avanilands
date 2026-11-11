@@ -261,8 +261,8 @@ class PropertyFormController extends ChangeNotifier {
     dimensionsText: dimensionsText.text,
     priceType: priceType,
     price: parseNumber(price.text),
-    pricePerUnit: parseNumber(pricePerUnit.text),
-    pricePerUnitUnit: pricePerUnitUnit,
+    pricePerUnit: autoPricePerUnit,
+    pricePerUnitUnit: autoPricePerUnit == null ? null : areaUnit,
     isNegotiable: isNegotiable,
     facing: facing,
     roadWidthFt: parseNumber(roadWidthFt.text),
@@ -282,6 +282,21 @@ class PropertyFormController extends ChangeNotifier {
     seoDescription: seoDescription.text,
     slug: slug.text,
   );
+
+  /// Price per area unit, worked out from the price and area so nobody
+  /// has to type it.
+  double? get autoPricePerUnit {
+    final total = parseNumber(price.text);
+    final area = parseNumber(areaValue.text);
+    if (priceType != PriceType.total ||
+        total == null ||
+        area == null ||
+        area <= 0) {
+      return null;
+    }
+    final perUnit = (total / area * 100).roundToDouble() / 100;
+    return perUnit > 0 ? perUnit : null;
+  }
 
   List<NearbyPlace> collectNearby() => [
     for (final row in nearby)

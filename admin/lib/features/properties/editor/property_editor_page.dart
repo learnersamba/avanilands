@@ -74,19 +74,7 @@ class _EditorState extends ConsumerState<_Editor> {
   final _formKey = GlobalKey<FormState>();
   final _form = PropertyFormController();
   final _sectionKeys = {
-    for (final name in [
-      'Basic',
-      'Location',
-      'Size & price',
-      'Details',
-      'Highlights',
-      'Media',
-      'Web & SEO',
-      'Enquiries',
-      'Site visits',
-      'Bookings',
-      'History',
-    ])
+    for (final name in ['Basic', 'Location', 'Size & price', 'Photos'])
       name: GlobalKey(),
   };
   bool _saving = false;
@@ -203,7 +191,8 @@ class _EditorState extends ConsumerState<_Editor> {
     return ListenableBuilder(
       listenable: _form,
       builder: (context, _) {
-        final fields = _detail?.fields;
+        final detail = _detail;
+        final fields = detail?.fields;
         final complete =
             fields != null && fields.publishState != PublishState.draft;
         final sections = <Widget>[
@@ -216,88 +205,111 @@ class _EditorState extends ConsumerState<_Editor> {
             'Size & price',
             SizePriceSection(form: _form, complete: complete),
           ),
-          _keyed('Details', DetailsSection(form: _form)),
           _keyed(
-            'Highlights',
-            HighlightsSection(form: _form, amenities: amenities),
+            'Photos',
+            detail == null
+                ? _PhotosLater(saving: _saving, onSave: _save)
+                : PhotosManager(
+                    key: _photosKey,
+                    propertyId: detail.id,
+                    onChanged: _refresh,
+                  ),
           ),
-          if (!_isNew) _keyed('Media', _media(_detail!.id)),
-          _keyed(
-            'Web & SEO',
-            SeoSection(form: _form, everPublished: fields?.publishedAt != null),
+          const _Divider(
+            title: 'More details',
+            subtitle: 'Optional. Add these now or later; buyers see them on the website.',
           ),
-          if (!_isNew)
-            _keyed('Enquiries', _EnquiriesSection(propertyId: _detail!.id)),
-          if (!_isNew)
-            _keyed('Site visits', _SiteVisitsSection(propertyId: _detail!.id)),
-          if (!_isNew)
-            _keyed('Bookings', _BookingsSection(propertyId: _detail!.id)),
-          if (!_isNew)
-            _keyed(
-              'History',
-              _HistorySection(propertyId: _detail!.id, code: _detail!.code),
+          DetailsSection(form: _form),
+          LegalSection(form: _form),
+          HighlightsSection(form: _form, amenities: amenities),
+          NearbySection(form: _form),
+          if (detail != null) _media(detail.id),
+          NotesSection(form: _form),
+          SeoSection(form: _form, everPublished: fields?.publishedAt != null),
+          if (detail != null) ...[
+            const _Divider(
+              title: 'Activity',
+              subtitle: 'Enquiries, visits and bookings for this property.',
             ),
+            _EnquiriesSection(propertyId: detail.id),
+            _SiteVisitsSection(propertyId: detail.id),
+            _BookingsSection(propertyId: detail.id),
+            _HistorySection(propertyId: detail.id, code: detail.code),
+          ],
         ];
         final panel = _SidePanel(
           form: _form,
-          detail: _detail,
+          detail: detail,
           saving: _saving,
           onSave: _save,
           onStatus: _statusChange,
+          onJump: _jump,
         );
 
-        return Form(
-          key: _formKey,
-          child: PageBody(
-            maxWidth: 1400,
-            children: [
-              _Header(
-                detail: _detail,
-                form: _form,
-                saving: _saving,
-                onSave: _save,
-              ),
-              Wrap(
-                spacing: 8,
-                runSpacing: 8,
+        return Stack(
+          children: [
+            Form(
+              key: _formKey,
+              child: PageBody(
+                maxWidth: 1400,
                 children: [
-                  for (final name in _sectionKeys.keys)
-                    if (!_isNew ||
-                        !const {
-                          'Media',
-                          'Enquiries',
-                          'Site visits',
-                          'Bookings',
-                          'History',
-                        }.contains(name))
-                      ActionChip(
-                        label: Text(name),
-                        onPressed: () => _jump(name),
-                      ),
+                  _Header(
+                    detail: detail,
+                    form: _form,
+                    saving: _saving,
+                    onSave: _save,
+                  ),
+                  const SizedBox(height: 8),
+                  if (wide)
+                    Row(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Expanded(
+                          child: Column(
+                            key: ValueKey(_form.loads),
+                            crossAxisAlignment: CrossAxisAlignment.stretch,
+                            children: _spaced(sections),
+                          ),
+                        ),
+                        const SizedBox(width: 24),
+                        SizedBox(width: 340, child: panel),
+                      ],
+                    )
+                  else ...[
+                    panel,
+                    const SizedBox(height: 24),
+                    Column(
+                      key: ValueKey(_form.loads),
+                      crossAxisAlignment: CrossAxisAlignment.stretch,
+                      children: _spaced(sections),
+                    ),
+                  ],
+                  // Room for the floating save bar.
+                  const SizedBox(height: 96),
                 ],
               ),
-              const SizedBox(height: 16),
-              if (wide)
-                Row(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Expanded(
-                      child: Column(
-                        key: ValueKey(_form.loads),
-                        children: _spaced(sections),
-                      ),
+            ),
+            Positioned(
+              left: 0,
+              right: 0,
+              bottom: 24,
+              child: IgnorePointer(
+                ignoring: !_form.dirty,
+                child: AnimatedSlide(
+                  offset: _form.dirty ? Offset.zero : const Offset(0, 2),
+                  duration: const Duration(milliseconds: 250),
+                  curve: Curves.easeOutCubic,
+                  child: Center(
+                    child: _SaveBar(
+                      isNew: detail == null,
+                      saving: _saving,
+                      onSave: _save,
                     ),
-                    const SizedBox(width: 24),
-                    SizedBox(width: 340, child: panel),
-                  ],
-                )
-              else ...[
-                panel,
-                const SizedBox(height: 24),
-                Column(key: ValueKey(_form.loads), children: _spaced(sections)),
-              ],
-            ],
-          ),
+                  ),
+                ),
+              ),
+            ),
+          ],
         );
       },
     );
@@ -309,27 +321,39 @@ class _EditorState extends ConsumerState<_Editor> {
   final _videosKey = GlobalKey();
   final _documentsKey = GlobalKey();
 
-  Widget _media(String propertyId) => Column(
-    crossAxisAlignment: CrossAxisAlignment.stretch,
-    children: [
-      PhotosManager(
-        key: _photosKey,
-        propertyId: propertyId,
-        onChanged: _refresh,
+  Widget _media(String propertyId) => OptionalPanel(
+    icon: Icons.video_library_outlined,
+    title: 'Videos and documents',
+    subtitle: 'YouTube walkthroughs, layout plans and approval copies.',
+    child: Theme(
+      // The managers draw their own cards; flatten them inside the panel.
+      data: Theme.of(context).copyWith(
+        cardTheme: const CardThemeData(
+          elevation: 0,
+          margin: EdgeInsets.zero,
+          color: BrandColors.cream,
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.all(Radius.circular(16)),
+          ),
+        ),
       ),
-      const SizedBox(height: 24),
-      VideosManager(
-        key: _videosKey,
-        propertyId: propertyId,
-        onChanged: _refresh,
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.stretch,
+        children: [
+          VideosManager(
+            key: _videosKey,
+            propertyId: propertyId,
+            onChanged: _refresh,
+          ),
+          const SizedBox(height: 16),
+          DocumentsManager(
+            key: _documentsKey,
+            propertyId: propertyId,
+            onChanged: _refresh,
+          ),
+        ],
       ),
-      const SizedBox(height: 24),
-      DocumentsManager(
-        key: _documentsKey,
-        propertyId: propertyId,
-        onChanged: _refresh,
-      ),
-    ],
+    ),
   );
 
   Widget _keyed(String name, Widget child) =>
@@ -337,7 +361,7 @@ class _EditorState extends ConsumerState<_Editor> {
 
   static List<Widget> _spaced(List<Widget> children) => [
     for (var i = 0; i < children.length; i++) ...[
-      if (i > 0) const SizedBox(height: 24),
+      if (i > 0) const SizedBox(height: 20),
       children[i],
     ],
   ];
@@ -375,11 +399,6 @@ class _Header extends StatelessWidget {
               ? 'Saved as a draft. Nothing is shown on the website until you publish.'
               : 'Last saved ${fields!.updatedAt == null ? '—' : formatDateTime(fields.updatedAt!)}',
           actions: [
-            if (form.dirty)
-              const Chip(
-                label: Text('Unsaved changes'),
-                avatar: Icon(Icons.edit, size: 16),
-              ),
             FilledButton.icon(
               onPressed: saving ? null : onSave,
               icon: const Icon(Icons.save_outlined, size: 18),
@@ -403,6 +422,7 @@ class _SidePanel extends ConsumerWidget {
     required this.saving,
     required this.onSave,
     required this.onStatus,
+    required this.onJump,
   });
 
   final PropertyFormController form;
@@ -410,6 +430,7 @@ class _SidePanel extends ConsumerWidget {
   final bool saving;
   final Future<bool> Function() onSave;
   final Future<void> Function(Future<bool> Function() action) onStatus;
+  final ValueChanged<String> onJump;
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
@@ -521,82 +542,263 @@ class _SidePanel extends ConsumerWidget {
         ],
         ListenableBuilder(
           listenable: form.checklistInputs,
-          builder: (context, _) {
-            final blockers = publishBlockers(
-              form.collect(),
-              hasCover: detail?.hasCover ?? false,
-            );
-            return SectionCard(
-              title: 'Ready to publish?',
-              child: blockers.isEmpty
-                  ? const Row(
-                      children: [
-                        Icon(Icons.check_circle, color: BrandColors.available),
-                        SizedBox(width: 8),
-                        Expanded(
-                          child: Text('Everything needed is filled in.'),
-                        ),
-                      ],
-                    )
-                  : Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        for (final blocker in blockers)
-                          Padding(
-                            padding: const EdgeInsets.only(bottom: 6),
-                            child: Row(
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              children: [
-                                const Icon(
-                                  Icons.radio_button_unchecked,
-                                  size: 18,
-                                  color: BrandColors.reserved,
-                                ),
-                                const SizedBox(width: 8),
-                                Expanded(child: Text(blocker)),
-                              ],
-                            ),
-                          ),
-                      ],
-                    ),
-            );
-          },
+          builder: (context, _) => _Checklist(
+            fields: form.collect(),
+            hasCover: detail?.hasCover ?? false,
+            onJump: onJump,
+          ),
         ),
         const SizedBox(height: 24),
         SectionCard(
           title: 'Featured',
           child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               SwitchListTile(
                 contentPadding: EdgeInsets.zero,
-                title: const Text('Show in "Featured" on the home page'),
+                title: const Text('Show on the home page'),
+                subtitle: const Text('In the "Featured" row.'),
                 value: form.isFeatured,
                 onChanged: (value) => form.set(() => form.isFeatured = value),
               ),
-              if (form.isFeatured)
-                TextFormField(
-                  controller: form.featuredRank,
-                  decoration: const InputDecoration(
-                    labelText: 'Order (1 = first)',
-                    helperText: 'Optional',
-                  ),
-                  keyboardType: TextInputType.number,
-                  validator: (value) {
-                    if (value == null || value.trim().isEmpty) return null;
-                    final rank = int.tryParse(value.trim());
-                    return (rank == null || rank < 1)
-                        ? 'A whole number from 1.'
-                        : null;
-                  },
-                ),
-              const SizedBox(height: 8),
-              Text('Saved with "Save changes".', style: textTheme.bodySmall),
+              Text('Saved with the other changes.', style: textTheme.bodySmall),
             ],
           ),
         ),
       ],
     );
   }
+}
+
+/// What publishing needs, as a progress card. Tapping an item jumps to it.
+class _Checklist extends StatelessWidget {
+  const _Checklist({
+    required this.fields,
+    required this.hasCover,
+    required this.onJump,
+  });
+
+  final PropertyFields fields;
+  final bool hasCover;
+  final ValueChanged<String> onJump;
+
+  @override
+  Widget build(BuildContext context) {
+    final items = [
+      ('Title', fields.title.trim().length >= 5, 'Basic'),
+      ('Property type', fields.propertyTypeId != null, 'Basic'),
+      ('City / town', fields.locationId != null, 'Location'),
+      ('Area', (fields.areaValue ?? 0) > 0, 'Size & price'),
+      (
+        'Price',
+        fields.priceType == PriceType.onRequest || (fields.price ?? 0) > 0,
+        'Size & price',
+      ),
+      ('Cover photo', hasCover, 'Photos'),
+    ];
+    final done = items.where((item) => item.$2).length;
+    final ready = done == items.length;
+    return SectionCard(
+      title: ready ? 'Ready to publish' : 'Ready to publish?',
+      trailing: Text(
+        '$done of ${items.length}',
+        style: TextStyle(
+          fontWeight: FontWeight.w700,
+          color: ready ? BrandColors.available : BrandColors.muted,
+        ),
+      ),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.stretch,
+        children: [
+          ClipRRect(
+            borderRadius: BorderRadius.circular(999),
+            child: TweenAnimationBuilder<double>(
+              tween: Tween(end: done / items.length),
+              duration: const Duration(milliseconds: 300),
+              builder: (context, value, _) => LinearProgressIndicator(
+                value: value,
+                minHeight: 8,
+                backgroundColor: BrandColors.cream,
+                color: ready ? BrandColors.available : BrandColors.sand,
+              ),
+            ),
+          ),
+          const SizedBox(height: 12),
+          for (final (label, isDone, section) in items)
+            InkWell(
+              borderRadius: BorderRadius.circular(10),
+              onTap: () => onJump(section),
+              child: Padding(
+                padding: const EdgeInsets.symmetric(vertical: 7, horizontal: 4),
+                child: Row(
+                  children: [
+                    Icon(
+                      isDone
+                          ? Icons.check_circle_rounded
+                          : Icons.radio_button_unchecked,
+                      size: 20,
+                      color: isDone ? BrandColors.available : BrandColors.line,
+                    ),
+                    const SizedBox(width: 10),
+                    Expanded(
+                      child: Text(
+                        label,
+                        style: TextStyle(
+                          color: isDone ? BrandColors.muted : BrandColors.text,
+                          decoration: isDone
+                              ? TextDecoration.lineThrough
+                              : null,
+                          decorationColor: BrandColors.muted,
+                        ),
+                      ),
+                    ),
+                    if (!isDone)
+                      const Icon(
+                        Icons.chevron_right,
+                        size: 18,
+                        color: BrandColors.muted,
+                      ),
+                  ],
+                ),
+              ),
+            ),
+          if (ready) ...[
+            const SizedBox(height: 8),
+            const Text(
+              'Everything needed is filled in.',
+              style: TextStyle(fontSize: 12, color: BrandColors.available),
+            ),
+          ],
+        ],
+      ),
+    );
+  }
+}
+
+/// Splits the required steps from the optional extras.
+class _Divider extends StatelessWidget {
+  const _Divider({required this.title, required this.subtitle});
+
+  final String title;
+  final String subtitle;
+
+  @override
+  Widget build(BuildContext context) => Padding(
+    padding: const EdgeInsets.only(top: 12, left: 4),
+    child: Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Text(
+          title,
+          style: const TextStyle(
+            fontSize: 20,
+            fontWeight: FontWeight.w700,
+            letterSpacing: -0.3,
+          ),
+        ),
+        const SizedBox(height: 2),
+        Text(subtitle, style: const TextStyle(color: BrandColors.muted)),
+      ],
+    ),
+  );
+}
+
+/// Step 4 before the first save: photos need a property to belong to.
+class _PhotosLater extends StatelessWidget {
+  const _PhotosLater({required this.saving, required this.onSave});
+
+  final bool saving;
+  final Future<bool> Function() onSave;
+
+  @override
+  Widget build(BuildContext context) => EditorStep(
+    number: 4,
+    title: 'Photos',
+    subtitle: 'At least one photo. The first one is the cover.',
+    done: () => false,
+    child: Container(
+      padding: const EdgeInsets.symmetric(vertical: 28, horizontal: 20),
+      decoration: BoxDecoration(
+        color: BrandColors.cream,
+        borderRadius: BorderRadius.circular(16),
+        border: Border.all(color: BrandColors.line),
+      ),
+      child: Column(
+        children: [
+          const Icon(
+            Icons.add_photo_alternate_outlined,
+            size: 36,
+            color: BrandColors.forest,
+          ),
+          const SizedBox(height: 10),
+          const Text(
+            'Save the draft first, then add photos here.',
+            textAlign: TextAlign.center,
+            style: TextStyle(color: BrandColors.muted),
+          ),
+          const SizedBox(height: 14),
+          FilledButton.icon(
+            onPressed: saving ? null : onSave,
+            icon: const Icon(Icons.save_outlined, size: 18),
+            label: const Text('Save draft and add photos'),
+          ),
+        ],
+      ),
+    ),
+  );
+}
+
+/// Floats at the bottom while there are unsaved changes.
+class _SaveBar extends StatelessWidget {
+  const _SaveBar({
+    required this.isNew,
+    required this.saving,
+    required this.onSave,
+  });
+
+  final bool isNew;
+  final bool saving;
+  final Future<bool> Function() onSave;
+
+  @override
+  Widget build(BuildContext context) => Container(
+    padding: const EdgeInsets.fromLTRB(20, 10, 10, 10),
+    decoration: BoxDecoration(
+      color: BrandColors.forestDark,
+      borderRadius: BorderRadius.circular(999),
+      boxShadow: const [
+        BoxShadow(
+          color: Color(0x33163A2B),
+          blurRadius: 24,
+          offset: Offset(0, 8),
+        ),
+      ],
+    ),
+    child: Row(
+      mainAxisSize: MainAxisSize.min,
+      children: [
+        const Icon(Icons.edit_outlined, size: 18, color: Colors.white70),
+        const SizedBox(width: 10),
+        const Text(
+          'You have unsaved changes',
+          style: TextStyle(color: Colors.white),
+        ),
+        const SizedBox(width: 16),
+        FilledButton.icon(
+          style: FilledButton.styleFrom(
+            backgroundColor: BrandColors.sand,
+            foregroundColor: BrandColors.forestDark,
+            shape: const StadiumBorder(),
+          ),
+          onPressed: saving ? null : onSave,
+          icon: const Icon(Icons.save_outlined, size: 18),
+          label: Text(
+            saving ? 'Saving…' : (isNew ? 'Save draft' : 'Save changes'),
+          ),
+        ),
+      ],
+    ),
+  );
 }
 
 class _EnquiriesSection extends ConsumerWidget {

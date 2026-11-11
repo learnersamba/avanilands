@@ -1,6 +1,7 @@
 import {
   ArrowLeftRight,
   BadgeCheck,
+  Clock,
   Building2,
   Compass,
   CornerDownRight,
@@ -32,7 +33,7 @@ import { EnquiryForm } from "@/components/enquiry/enquiry-form";
 import { ContactTabs } from "@/components/site-visit/contact-tabs";
 import { SiteVisitForm } from "@/components/site-visit/site-visit-form";
 import { TrackedLink } from "@/components/enquiry/tracked-link";
-import { buttonClasses, Container, StatusBadge } from "@/components/ui";
+import { buttonClasses, Container, StatusBadge, StatusRibbon } from "@/components/ui";
 import {
   getPropertyPage,
   getPublishedSlugs,
@@ -146,18 +147,37 @@ async function PropertyContent({ params }: { params: Promise<{ slug: string }> }
       {p.availability !== "available" && (
         <Container className="pt-4">
           <div
-            className={`rounded-xl px-5 py-4 text-sm font-medium ${
-              p.availability === "reserved" ? "bg-reserved/10 text-reserved" : "bg-sold/10 text-sold"
+            role="status"
+            className={`flex items-center gap-4 rounded-2xl px-5 py-4 text-white shadow-md ${
+              p.availability === "reserved"
+                ? "bg-gradient-to-r from-reserved to-[#d97706] shadow-reserved/20"
+                : "bg-gradient-to-r from-sold to-[#e04848] shadow-sold/20"
             }`}
           >
-            {p.availability === "reserved"
-              ? "This property is reserved by another buyer. Ask us about similar land — we'll also let you know if it becomes available."
-              : "This property has been sold. Have a look at similar land below."}
+            <span className="flex h-11 w-11 shrink-0 items-center justify-center rounded-full bg-white/20">
+              {p.availability === "reserved" ? (
+                <Clock className="h-5 w-5" aria-hidden />
+              ) : (
+                <BadgeCheck className="h-5 w-5" aria-hidden />
+              )}
+            </span>
+            <div>
+              <p className="text-base font-bold uppercase tracking-wide">
+                {p.availability === "reserved" ? "Reserved" : "Sold"}
+              </p>
+              <p className="text-sm text-white/90">
+                {p.availability === "reserved"
+                  ? "This property is reserved by another buyer. Ask us about similar land — we'll also let you know if it becomes available."
+                  : "This property has been sold. Have a look at similar land below."}
+              </p>
+            </div>
           </div>
         </Container>
       )}
 
-      <Container className="pt-6">
+      <Container className="relative pt-6">
+        <div className="relative">
+          <StatusRibbon status={p.availability} />
         <PhotoGallery
           photos={page.photos.map((photo) => ({
             id: photo.id,
@@ -167,6 +187,7 @@ async function PropertyContent({ params }: { params: Promise<{ slug: string }> }
             large: mediaUrl(photo.large),
           }))}
         />
+        </div>
       </Container>
 
       <Container className="grid gap-10 py-10 lg:grid-cols-[1fr_380px]">
@@ -355,7 +376,15 @@ async function PropertyContent({ params }: { params: Promise<{ slug: string }> }
 
         <aside id="enquire" className="scroll-mt-24 lg:sticky lg:top-24 lg:self-start" aria-label="Contact about this property">
           <span id="visit" className="block scroll-mt-24" aria-hidden />
-          <div className="rounded-2xl bg-white p-6 shadow-sm ring-1 ring-line">
+          <div
+            className={`rounded-2xl bg-white p-6 shadow-sm ring-1 ring-line ${
+              p.availability === "sold"
+                ? "border-t-4 border-sold"
+                : p.availability === "reserved"
+                  ? "border-t-4 border-reserved"
+                  : ""
+            }`}
+          >
             <h2 className="font-serif text-2xl text-forest">Interested?</h2>
             {p.availability === "sold" ? (
               <p className="mt-2 text-sm text-ink/80">

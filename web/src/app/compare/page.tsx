@@ -226,7 +226,7 @@ async function Comparison({
                 {items.map((p) => (
                   <td key={p.id} className="border-l border-line p-4">
                     {p.availability === "sold" ? (
-                      <span className="text-muted">Sold</span>
+                      <StatusBadge status="sold" />
                     ) : (
                       <div className="flex flex-col gap-2">
                         <Link
