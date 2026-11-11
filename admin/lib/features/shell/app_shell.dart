@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 
@@ -10,6 +11,7 @@ import '../enquiries/enquiry_alerts.dart';
 import '../notifications/notifications_repository.dart';
 import '../properties/properties_repository.dart';
 import '../../core/widgets/brand_mark.dart';
+import '../../core/widgets/landscape.dart';
 import '../../core/widgets/common.dart';
 
 class _NavItem {
@@ -27,12 +29,12 @@ class _NavItem {
 }
 
 const _items = [
-  _NavItem('/', 'Dashboard', Icons.space_dashboard_outlined),
-  _NavItem('/properties', 'Properties', Icons.landscape_outlined),
+  _NavItem('/', 'Dashboard', Icons.home_outlined),
+  _NavItem('/properties', 'Properties', Icons.layers_outlined),
   _NavItem('/enquiries', 'Enquiries', Icons.mail_outline),
-  _NavItem('/site-visits', 'Site visits', Icons.event_available_outlined),
-  _NavItem('/bookings', 'Bookings', Icons.key_outlined),
-  _NavItem('/analytics', 'Analytics', Icons.insights_outlined),
+  _NavItem('/site-visits', 'Site visits', Icons.calendar_today_outlined),
+  _NavItem('/bookings', 'Bookings', Icons.sell_outlined),
+  _NavItem('/analytics', 'Analytics', Icons.bar_chart_rounded),
   _NavItem('/locations', 'Locations & lists', Icons.place_outlined),
   _NavItem('/activity', 'Activity log', Icons.history),
   _NavItem(
@@ -76,16 +78,18 @@ class AppShell extends ConsumerWidget {
         : (width >= 720 ? _NavMode.rail : _NavMode.drawer);
     final summary = ref.watch(dashboardSummaryProvider).value;
     final requestedVisits = summary?.requestedSiteVisits ?? 0;
+    final badges = {'/enquiries': summary?.newEnquiries ?? 0};
 
     final sidebar = _Sidebar(
       items: items,
       location: location,
+      badges: badges,
       compact: mode == _NavMode.rail,
     );
     return Scaffold(
       drawer: mode == _NavMode.drawer
           ? Drawer(
-              child: _Sidebar(items: items, location: location),
+              child: _Sidebar(items: items, location: location, badges: badges),
             )
           : null,
       body: Row(
@@ -99,7 +103,6 @@ class AppShell extends ConsumerWidget {
                   showMenu: mode == _NavMode.drawer,
                   requestedVisits: requestedVisits,
                 ),
-                const Divider(height: 1),
                 Expanded(child: EnquiryAlerts(child: child)),
               ],
             ),
@@ -120,56 +123,99 @@ class _Sidebar extends StatelessWidget {
   const _Sidebar({
     required this.items,
     required this.location,
+    required this.badges,
     this.compact = false,
   });
 
   final List<_NavItem> items;
   final String location;
+  final Map<String, int> badges;
   final bool compact;
 
   @override
   Widget build(BuildContext context) {
     return Container(
-      width: compact ? 76 : 248,
-      color: BrandColors.forest,
-      child: SafeArea(
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.stretch,
-          children: [
-            Padding(
-              padding: EdgeInsets.symmetric(
-                horizontal: compact ? 0 : 20,
-                vertical: 22,
-              ),
-              child: Row(
-                mainAxisAlignment: compact
-                    ? MainAxisAlignment.center
-                    : MainAxisAlignment.start,
-                children: [
-                  const BrandMark(size: 32, onDark: true),
-                  if (!compact) ...[
-                    const SizedBox(width: 10),
-                    const Text(
-                      'AVANILANDS',
-                      style: TextStyle(
-                        color: Colors.white,
-                        fontSize: 16,
-                        fontWeight: FontWeight.w700,
-                        letterSpacing: 1.8,
-                      ),
-                    ),
-                  ],
-                ],
-              ),
-            ),
-            for (final item in items)
-              _SidebarTile(
-                item: item,
-                selected: _isSelected(item.path, location),
-                compact: compact,
-              ),
-          ],
+      width: compact ? 80 : 256,
+      decoration: const BoxDecoration(
+        gradient: LinearGradient(
+          begin: Alignment.topCenter,
+          end: Alignment.bottomCenter,
+          colors: [Color(0xFF0A4E3B), Color(0xFF053A2C)],
         ),
+      ),
+      child: Stack(
+        children: [
+          const Positioned(
+            left: 0,
+            right: 0,
+            bottom: 0,
+            height: 220,
+            child: IgnorePointer(child: CustomPaint(painter: HillsPainter())),
+          ),
+          SafeArea(
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.stretch,
+              children: [
+                Padding(
+                  padding: EdgeInsets.fromLTRB(
+                    compact ? 0 : 24,
+                    26,
+                    compact ? 0 : 16,
+                    26,
+                  ),
+                  child: Row(
+                    mainAxisAlignment: compact
+                        ? MainAxisAlignment.center
+                        : MainAxisAlignment.start,
+                    children: [
+                      const BrandMark(size: 38, onDark: true),
+                      if (!compact) ...[
+                        const SizedBox(width: 12),
+                        Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            const Text(
+                              'AVANILANDS',
+                              style: TextStyle(
+                                color: Colors.white,
+                                fontSize: 18,
+                                fontWeight: FontWeight.w700,
+                                letterSpacing: 1.6,
+                              ),
+                            ),
+                            const SizedBox(height: 2),
+                            Text(
+                              'Plots · Sites · Investments',
+                              style: TextStyle(
+                                color: Colors.white.withValues(alpha: 0.62),
+                                fontSize: 11,
+                                letterSpacing: 0.3,
+                              ),
+                            ),
+                          ],
+                        ),
+                      ],
+                    ],
+                  ),
+                ),
+                Expanded(
+                  child: ListView(
+                    padding: const EdgeInsets.only(bottom: 24),
+                    children: [
+                      for (final item in items)
+                        _SidebarTile(
+                          item: item,
+                          selected: _isSelected(item.path, location),
+                          compact: compact,
+                          badge: badges[item.path] ?? 0,
+                        ),
+                    ],
+                  ),
+                ),
+              ],
+            ),
+          ),
+        ],
       ),
     );
   }
@@ -180,48 +226,110 @@ class _SidebarTile extends StatelessWidget {
     required this.item,
     required this.selected,
     required this.compact,
+    this.badge = 0,
   });
 
   final _NavItem item;
   final bool selected;
   final bool compact;
+  final int badge;
 
   @override
   Widget build(BuildContext context) {
-    final color = selected ? BrandColors.forestDark : Colors.white;
-    final tile = Material(
-      color: selected ? BrandColors.sand : Colors.transparent,
-      borderRadius: BorderRadius.circular(10),
-      child: InkWell(
-        borderRadius: BorderRadius.circular(10),
-        onTap: () {
-          if (Scaffold.maybeOf(context)?.isDrawerOpen ?? false) {
-            Navigator.pop(context);
-          }
-          context.go(item.path);
-        },
-        child: Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 12),
-          child: Row(
-            mainAxisAlignment: compact
-                ? MainAxisAlignment.center
-                : MainAxisAlignment.start,
-            children: [
-              Icon(item.icon, color: color, size: 22),
-              if (!compact) ...[
-                const SizedBox(width: 12),
-                Text(
-                  item.label,
-                  style: TextStyle(color: color, fontWeight: FontWeight.w500),
+    final color = selected
+        ? BrandColors.forestDark
+        : Colors.white.withValues(alpha: 0.88);
+    final count = badge > 99 ? '99+' : '$badge';
+    final icon = compact && badge > 0
+        ? Badge(
+            label: Text(count),
+            backgroundColor: BrandColors.sand,
+            textColor: BrandColors.forestDark,
+            child: Icon(item.icon, color: color, size: 22),
+          )
+        : Icon(item.icon, color: color, size: 22);
+    final tile = DecoratedBox(
+      decoration: BoxDecoration(
+        borderRadius: BorderRadius.circular(14),
+        gradient: selected
+            ? const LinearGradient(
+                colors: [Color(0xFFF8EED6), Color(0xFFEBD49A)],
+              )
+            : null,
+        boxShadow: selected
+            ? const [
+                BoxShadow(
+                  color: Color(0x33000000),
+                  blurRadius: 12,
+                  offset: Offset(0, 4),
                 ),
+              ]
+            : null,
+      ),
+      child: Material(
+        type: MaterialType.transparency,
+        borderRadius: BorderRadius.circular(14),
+        clipBehavior: Clip.antiAlias,
+        child: InkWell(
+          hoverColor: Colors.white.withValues(alpha: 0.07),
+          onTap: () {
+            if (Scaffold.maybeOf(context)?.isDrawerOpen ?? false) {
+              Navigator.pop(context);
+            }
+            context.go(item.path);
+          },
+          child: Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 13),
+            child: Row(
+              mainAxisAlignment: compact
+                  ? MainAxisAlignment.center
+                  : MainAxisAlignment.start,
+              children: [
+                icon,
+                if (!compact) ...[
+                  const SizedBox(width: 14),
+                  Expanded(
+                    child: Text(
+                      item.label,
+                      style: TextStyle(
+                        color: color,
+                        fontSize: 15,
+                        fontWeight: selected
+                            ? FontWeight.w600
+                            : FontWeight.w500,
+                      ),
+                    ),
+                  ),
+                  if (badge > 0)
+                    Container(
+                      constraints: const BoxConstraints(minWidth: 24),
+                      height: 24,
+                      padding: const EdgeInsets.symmetric(horizontal: 7),
+                      alignment: Alignment.center,
+                      decoration: BoxDecoration(
+                        color: selected
+                            ? BrandColors.forest
+                            : Colors.white.withValues(alpha: 0.16),
+                        borderRadius: BorderRadius.circular(12),
+                      ),
+                      child: Text(
+                        count,
+                        style: const TextStyle(
+                          color: Colors.white,
+                          fontSize: 12,
+                          fontWeight: FontWeight.w700,
+                        ),
+                      ),
+                    ),
+                ],
               ],
-            ],
+            ),
           ),
         ),
       ),
     );
     return Padding(
-      padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 2),
+      padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 3),
       child: compact ? Tooltip(message: item.label, child: tile) : tile,
     );
   }
@@ -240,10 +348,14 @@ class _TopBar extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
+    final wide = MediaQuery.sizeOf(context).width >= 900;
     return Container(
-      color: Colors.white,
-      height: 60,
-      padding: const EdgeInsets.symmetric(horizontal: 12),
+      height: 72,
+      padding: EdgeInsets.symmetric(horizontal: wide ? 28 : 12),
+      decoration: const BoxDecoration(
+        color: Colors.white,
+        border: Border(bottom: BorderSide(color: BrandColors.line)),
+      ),
       child: Row(
         children: [
           if (showMenu)
@@ -252,24 +364,14 @@ class _TopBar extends ConsumerWidget {
               icon: const Icon(Icons.menu),
               onPressed: () => Scaffold.of(context).openDrawer(),
             ),
-          if (MediaQuery.sizeOf(context).width >= 900)
-            const Padding(
-              padding: EdgeInsets.only(left: 12),
-              child: SizedBox(width: 320, child: _QuickSearch()),
+          if (wide)
+            Flexible(
+              child: ConstrainedBox(
+                constraints: const BoxConstraints(maxWidth: 480),
+                child: const _QuickSearch(),
+              ),
             ),
           const Spacer(),
-          IconButton(
-            tooltip: requestedVisits == 0
-                ? 'No site visits waiting for confirmation'
-                : '$requestedVisits site ${requestedVisits == 1 ? 'visit' : 'visits'} to confirm',
-            onPressed: () =>
-                context.go('/site-visits?status=requested&when=all'),
-            icon: Badge(
-              isLabelVisible: requestedVisits > 0,
-              label: Text('$requestedVisits'),
-              child: const Icon(Icons.event_available_outlined),
-            ),
-          ),
           Builder(
             builder: (context) {
               final unread = ref.watch(unreadNotificationsProvider).value ?? 0;
@@ -289,6 +391,27 @@ class _TopBar extends ConsumerWidget {
             },
           ),
           const SizedBox(width: 4),
+          IconButton(
+            tooltip: requestedVisits == 0
+                ? 'No site visits waiting for confirmation'
+                : '$requestedVisits site ${requestedVisits == 1 ? 'visit' : 'visits'} to confirm',
+            onPressed: () =>
+                context.go('/site-visits?status=requested&when=all'),
+            icon: Badge(
+              isLabelVisible: requestedVisits > 0,
+              label: Text('$requestedVisits'),
+              child: const Icon(Icons.calendar_today_outlined),
+            ),
+          ),
+          if (wide)
+            Container(
+              width: 1,
+              height: 32,
+              margin: const EdgeInsets.symmetric(horizontal: 16),
+              color: BrandColors.line,
+            )
+          else
+            const SizedBox(width: 4),
           PopupMenuButton<String>(
             tooltip: 'Account',
             onSelected: (value) {
@@ -331,21 +454,29 @@ class _TopBar extends ConsumerWidget {
               child: Row(
                 children: [
                   CircleAvatar(
-                    radius: 16,
-                    backgroundColor: BrandColors.sand,
+                    radius: 20,
+                    backgroundColor: const Color(0xFFF4E8D1),
                     child: Text(
                       _initials(admin.fullName),
                       style: const TextStyle(
                         color: BrandColors.forestDark,
-                        fontSize: 13,
+                        fontSize: 14,
                         fontWeight: FontWeight.w700,
                       ),
                     ),
                   ),
                   if (MediaQuery.sizeOf(context).width >= 600) ...[
-                    const SizedBox(width: 8),
-                    Text(admin.fullName),
-                    const Icon(Icons.expand_more, size: 18),
+                    const SizedBox(width: 10),
+                    Text(
+                      admin.fullName,
+                      style: const TextStyle(
+                        color: BrandColors.ink,
+                        fontSize: 15,
+                        fontWeight: FontWeight.w600,
+                      ),
+                    ),
+                    const SizedBox(width: 4),
+                    const Icon(Icons.expand_more, size: 20),
                   ],
                 ],
               ),
@@ -379,11 +510,36 @@ class _QuickSearch extends ConsumerStatefulWidget {
 
 class _QuickSearchState extends ConsumerState<_QuickSearch> {
   final _text = TextEditingController();
+  final _focus = FocusNode();
+
+  @override
+  void initState() {
+    super.initState();
+    HardwareKeyboard.instance.addHandler(_onKey);
+  }
 
   @override
   void dispose() {
+    HardwareKeyboard.instance.removeHandler(_onKey);
+    _focus.dispose();
     _text.dispose();
     super.dispose();
+  }
+
+  /// Ctrl+K (⌘K on a Mac) jumps to the search box from anywhere.
+  bool _onKey(KeyEvent event) {
+    final keyboard = HardwareKeyboard.instance;
+    if (event is KeyDownEvent &&
+        event.logicalKey == LogicalKeyboardKey.keyK &&
+        (keyboard.isControlPressed || keyboard.isMetaPressed)) {
+      _focus.requestFocus();
+      _text.selection = TextSelection(
+        baseOffset: 0,
+        extentOffset: _text.text.length,
+      );
+      return true;
+    }
+    return false;
   }
 
   Future<void> _submit(String value) async {
@@ -430,11 +586,42 @@ class _QuickSearchState extends ConsumerState<_QuickSearch> {
 
   @override
   Widget build(BuildContext context) {
+    const radius = BorderRadius.all(Radius.circular(14));
     return TextField(
       controller: _text,
-      decoration: const InputDecoration(
-        hintText: 'Search: AL-0007, ENQ-000012 or a place',
-        prefixIcon: Icon(Icons.search, size: 20),
+      focusNode: _focus,
+      style: const TextStyle(fontSize: 14.5),
+      decoration: InputDecoration(
+        hintText: 'Search: AL-0007, ENQ-000012 or properties…',
+        hintStyle: const TextStyle(color: Color(0xFF68736F)),
+        prefixIcon: const Icon(Icons.search, size: 22),
+        suffixIcon: Padding(
+          padding: const EdgeInsets.only(right: 10),
+          child: Container(
+            padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 3),
+            decoration: BoxDecoration(
+              color: Colors.white,
+              border: Border.all(color: BrandColors.line),
+              borderRadius: BorderRadius.circular(6),
+            ),
+            child: const Text(
+              'Ctrl + K',
+              style: TextStyle(fontSize: 11.5, color: Color(0xFF68736F)),
+            ),
+          ),
+        ),
+        suffixIconConstraints: const BoxConstraints(minHeight: 24),
+        filled: true,
+        fillColor: const Color(0xFFF9F8F4),
+        contentPadding: const EdgeInsets.symmetric(vertical: 14),
+        enabledBorder: const OutlineInputBorder(
+          borderRadius: radius,
+          borderSide: BorderSide(color: BrandColors.line),
+        ),
+        focusedBorder: const OutlineInputBorder(
+          borderRadius: radius,
+          borderSide: BorderSide(color: BrandColors.forest, width: 1.5),
+        ),
       ),
       textInputAction: TextInputAction.search,
       onSubmitted: _submit,

@@ -3,8 +3,10 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../errors.dart';
 import '../theme.dart';
+import 'landscape.dart';
 
-/// Title row at the top of every admin page.
+/// Title banner at the top of every admin page: the page name over a faint
+/// countryside (the dashboard's greeting style), with actions on the right.
 class PageHeader extends StatelessWidget {
   const PageHeader({
     super.key,
@@ -19,34 +21,87 @@ class PageHeader extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final textTheme = Theme.of(context).textTheme;
-    return Padding(
-      padding: const EdgeInsets.only(bottom: 24),
-      child: Wrap(
-        alignment: WrapAlignment.spaceBetween,
-        crossAxisAlignment: WrapCrossAlignment.center,
-        runSpacing: 12,
-        spacing: 12,
+    final narrow = MediaQuery.sizeOf(context).width < 700;
+    const cream = BrandColors.cream;
+    return Container(
+      margin: const EdgeInsets.only(bottom: 24),
+      clipBehavior: Clip.antiAlias,
+      decoration: BoxDecoration(
+        color: Colors.white,
+        borderRadius: BorderRadius.circular(20),
+        border: Border.all(color: BrandColors.line.withValues(alpha: 0.8)),
+        boxShadow: const [
+          BoxShadow(
+            color: Color(0x0A17211D),
+            blurRadius: 18,
+            offset: Offset(0, 4),
+          ),
+        ],
+      ),
+      child: Stack(
+        fit: StackFit.passthrough,
         children: [
-          Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            mainAxisSize: MainAxisSize.min,
-            children: [
-              Text(
-                title,
-                style: textTheme.headlineSmall?.copyWith(
-                  fontWeight: FontWeight.w600,
-                  color: BrandColors.ink,
+          if (!narrow) ...[
+            const Positioned.fill(
+              child: CustomPaint(painter: LandscapePainter()),
+            ),
+            Positioned.fill(
+              child: DecoratedBox(
+                decoration: BoxDecoration(
+                  gradient: LinearGradient(
+                    colors: [
+                      cream,
+                      cream.withValues(alpha: 0.97),
+                      cream.withValues(alpha: 0.6),
+                    ],
+                    stops: const [0, 0.5, 1],
+                  ),
                 ),
               ),
-              if (subtitle != null) ...[
-                const SizedBox(height: 4),
-                Text(subtitle!, style: textTheme.bodyMedium),
+            ),
+          ],
+          Padding(
+            padding: EdgeInsets.symmetric(
+              horizontal: narrow ? 20 : 28,
+              vertical: narrow ? 18 : 24,
+            ),
+            child: Wrap(
+              alignment: WrapAlignment.spaceBetween,
+              crossAxisAlignment: WrapCrossAlignment.center,
+              runSpacing: 14,
+              spacing: 16,
+              children: [
+                Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+                    Text(
+                      title,
+                      style: TextStyle(
+                        color: BrandColors.forestDark,
+                        fontSize: narrow ? 22 : 26,
+                        fontWeight: FontWeight.w700,
+                        letterSpacing: -0.4,
+                        height: 1.2,
+                      ),
+                    ),
+                    if (subtitle != null) ...[
+                      const SizedBox(height: 4),
+                      Text(
+                        subtitle!,
+                        style: const TextStyle(
+                          color: BrandColors.muted,
+                          fontSize: 14.5,
+                        ),
+                      ),
+                    ],
+                  ],
+                ),
+                if (actions.isNotEmpty)
+                  Wrap(spacing: 10, runSpacing: 10, children: actions),
               ],
-            ],
+            ),
           ),
-          if (actions.isNotEmpty)
-            Wrap(spacing: 8, runSpacing: 8, children: actions),
         ],
       ),
     );
@@ -55,7 +110,7 @@ class PageHeader extends StatelessWidget {
 
 /// Scrollable page body with standard padding and a max width.
 class PageBody extends StatelessWidget {
-  const PageBody({super.key, required this.children, this.maxWidth = 1280});
+  const PageBody({super.key, required this.children, this.maxWidth = 1440});
 
   final List<Widget> children;
   final double maxWidth;
@@ -86,7 +141,7 @@ class SectionCard extends StatelessWidget {
     required this.title,
     required this.child,
     this.trailing,
-    this.padding = const EdgeInsets.all(20),
+    this.padding = const EdgeInsets.all(24),
   });
 
   final String title;
@@ -107,8 +162,12 @@ class SectionCard extends StatelessWidget {
                 Expanded(
                   child: Text(
                     title,
-                    style: Theme.of(context).textTheme.titleMedium
-                        ?.copyWith(fontWeight: FontWeight.w600),
+                    style: const TextStyle(
+                      color: BrandColors.text,
+                      fontSize: 17,
+                      fontWeight: FontWeight.w600,
+                      letterSpacing: -0.2,
+                    ),
                   ),
                 ),
                 ?trailing,
@@ -175,9 +234,21 @@ class EmptyState extends StatelessWidget {
       padding: const EdgeInsets.all(24),
       child: Column(
         children: [
-          Icon(icon, color: BrandColors.sold),
-          const SizedBox(height: 8),
-          Text(message, textAlign: TextAlign.center),
+          Container(
+            width: 56,
+            height: 56,
+            decoration: const BoxDecoration(
+              color: Color(0xFFEFF6F1),
+              shape: BoxShape.circle,
+            ),
+            child: Icon(icon, color: BrandColors.forest, size: 26),
+          ),
+          const SizedBox(height: 12),
+          Text(
+            message,
+            textAlign: TextAlign.center,
+            style: const TextStyle(color: BrandColors.muted, fontSize: 14),
+          ),
         ],
       ),
     );
@@ -217,7 +288,7 @@ class Pill extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 3),
+      padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 4),
       decoration: BoxDecoration(
         color: color.withValues(alpha: 0.12),
         borderRadius: BorderRadius.circular(999),

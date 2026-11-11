@@ -26,7 +26,11 @@ class ActivityTile extends StatelessWidget {
       child: Row(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          Icon(_icon(entry.entityType), size: 20, color: BrandColors.forest),
+          Icon(
+            activityIcon(entry.entityType),
+            size: 20,
+            color: BrandColors.forest,
+          ),
           const SizedBox(width: 12),
           Expanded(
             child: Column(
@@ -53,22 +57,23 @@ class ActivityTile extends StatelessWidget {
       ),
     );
   }
-
-  static IconData _icon(String entityType) => switch (entityType) {
-    'property' => Icons.landscape_outlined,
-    'image' => Icons.photo_outlined,
-    'video' => Icons.videocam_outlined,
-    'document' => Icons.description_outlined,
-    'enquiry' => Icons.mail_outline,
-    'site_visit' => Icons.event_available_outlined,
-    'booking' => Icons.key_outlined,
-    'content' || 'faq' || 'testimonial' || 'banner' => Icons.web_outlined,
-    'location' => Icons.place_outlined,
-    'admin' => Icons.admin_panel_settings_outlined,
-    'settings' => Icons.settings_outlined,
-    _ => Icons.edit_note,
-  };
 }
+
+/// Icon for an audit entry's kind of record.
+IconData activityIcon(String entityType) => switch (entityType) {
+  'property' => Icons.landscape_outlined,
+  'image' => Icons.photo_outlined,
+  'video' => Icons.videocam_outlined,
+  'document' => Icons.description_outlined,
+  'enquiry' => Icons.mail_outline,
+  'site_visit' => Icons.event_available_outlined,
+  'booking' => Icons.key_outlined,
+  'content' || 'faq' || 'testimonial' || 'banner' => Icons.web_outlined,
+  'location' => Icons.place_outlined,
+  'admin' => Icons.admin_panel_settings_outlined,
+  'settings' => Icons.settings_outlined,
+  _ => Icons.edit_note,
+};
 
 /// Name to show for an audit entry's actor.
 String actorLabel(String? actorId, Map<String, String> adminNames) {
