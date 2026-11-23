@@ -122,8 +122,8 @@ The admin app is only a convenience. **Every rule is enforced in the database** 
 | Env | Supabase | Website | Admin |
 |-----|----------|---------|-------|
 | Local | Supabase CLI (Docker) on this laptop | `npm run dev` | `flutter run -d chrome` |
-| Staging | Cloud project "avanilands-staging" (Free plan, Mumbai) | Vercel preview | Firebase Hosting preview channel |
-| Production | Cloud project "avanilands" (`vyfooevrfflmbihmahap`, Mumbai) | Vercel production + `avanilands.in` | Firebase Hosting + `admin.avanilands.in` |
+| Staging | Cloud project "avanilands-staging" (Free plan, Mumbai) | Second App Hosting backend | Firebase Hosting preview channel |
+| Production | Cloud project "avanilands" (`vyfooevrfflmbihmahap`, Mumbai), Free plan at launch | Firebase App Hosting (Singapore, one server) + `avanilands.in` | Firebase Hosting + `admin.avanilands.in` |
 
 Database changes only go through migration files, applied local → staging → production.
 
@@ -131,9 +131,9 @@ Database changes only go through migration files, applied local → staging → 
 
 | Item | Development | After launch |
 |------|-------------|--------------|
-| Supabase | Free | Pro ~$25/month |
-| Website hosting | Free (Vercel Hobby, non-commercial while building) | Vercel Pro ~$20/month (or Cloudflare, free) |
-| Admin hosting | Free (Firebase Hosting, Spark plan) | Free |
+| Supabase | Free | Free at launch (decision 132); Pro ~$25/month when files near 1 GB or sales start |
+| Website hosting | Free | Firebase App Hosting, pay as you go: ~$0–5/month at launch traffic (decision 132) |
+| Admin hosting | Free (Firebase Hosting) | Free (within the Blaze plan's free allowance) |
 | Email (Resend) | Free (3,000/month) | Free at our volume |
 | Bot check (Turnstile) | Free | Free |
 | Maps | Free tier | Free tier; Google Maps only if chosen |

@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 
+import '../../core/features.dart';
 import '../../core/browser.dart';
 import '../../core/errors.dart';
 import '../../core/formatting.dart';
@@ -177,7 +178,8 @@ class _CustomerCard extends ConsumerWidget {
                   icon: const Icon(Icons.mail_outline, size: 18),
                   label: const Text('Email'),
                 ),
-              if (enquiry.property != null &&
+              if (Features.bookings &&
+                  enquiry.property != null &&
                   enquiry.property!.availability == 'available')
                 OutlinedButton.icon(
                   onPressed: () => startBooking(

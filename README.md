@@ -206,6 +206,8 @@ tool/seed_photos.sh
 | Restart Edge Functions after an edit | `docker restart supabase_edge_runtime_avanilands` |
 | Admin build for hosting | `tool/build_admin.sh admin/env/<env>.json` |
 | Publish the admin (Firebase Hosting) | `tool/deploy_admin.sh admin/env/production.json` |
+| Publish the website (Firebase App Hosting) | `git push` to `main` (automatic rollout; settings in `web/apphosting.yaml`) |
+| Features switched off for launch | `web/src/lib/features.ts`, `admin/lib/core/features.dart` (decision 132) |
 
 ---
 

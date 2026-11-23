@@ -129,7 +129,7 @@ void main() {
       expect(range.previousLabel, 'the previous 30 days');
     });
 
-    test('chosen dates stay within a year and not after today', () {
+    test('chosen dates stay within the kept 6 months and not after today', () {
       final range = AnalyticsRange.fromQuery({
         'from': '2026-10-05',
         'to': '2026-10-20',
@@ -150,7 +150,8 @@ void main() {
         today,
         today: today,
       );
-      expect(long.days, 366);
+      expect(long.days, 183);
+      expect(long.from, DateTime.utc(2026, 5, 11));
       final backwards = AnalyticsRange.custom(
         DateTime.utc(2026, 11, 5),
         DateTime.utc(2026, 11, 1),

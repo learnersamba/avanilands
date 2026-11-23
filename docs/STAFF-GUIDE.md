@@ -71,6 +71,8 @@ The **calendar** beside the list shows each day's visits as dots (requested, con
 
 ## Bookings
 
+> **Switched off for now** (decision 132): there is no Bookings page yet. Agree bookings by phone, mark the property **Reserved** / **Sold** yourself, and note the details on the enquiry or site visit. The steps below apply once bookings are switched on.
+
 A booking follows the steps from our plan. The property changes by itself — never change a booked property's status by hand (the panel won't let you).
 
 | Step | Who | What happens |
@@ -100,7 +102,7 @@ Every publish and change is in the **Activity log**.
 
 ## Analytics
 
-**Analytics** in the menu shows how the website is doing: visitors, property views, enquiries, site visit requests, saves, booking requests and sales, each compared with the period before. Pick *Last 7 days*, *Last 30 days*, *This month* and so on, or **Choose dates…** (up to a year). Below that you'll find:
+**Analytics** in the menu shows how the website is doing: visitors, property views, enquiries, site visit requests, saves, booking requests and sales, each compared with the period before. Pick *Last 7 days*, *Last 30 days*, *This month* and so on, or **Choose dates…** (within the last 6 months — older page views are removed). Below that you'll find:
 
 - **Visitors per day:** point at a bar to see that day's numbers.
 - **From visit to sale:** how many looked at land, got in touch, asked to book and bought.
@@ -116,6 +118,8 @@ The bell at the top counts what's new for you: website enquiries, site visit and
 Customers with an account also get updates in **My account** — including when land they saved changes price, gets reserved or sold, so keep prices and availability up to date.
 
 ## Customer accounts
+
+> **Switched off for now** (decision 132): customers enquire and book visits without an account. The text below applies once accounts are switched on.
 
 Customers can (optionally) sign in on the website with a code sent to their email. They can save land and see their own enquiries and site visits in **My account**, in plain words (e.g. "We're in touch", "Confirmed") — they never see your notes or who is assigned.
 

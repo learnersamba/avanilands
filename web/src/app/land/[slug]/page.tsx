@@ -54,6 +54,7 @@ import {
   whatsappLink,
 } from "@/lib/format";
 import { env } from "@/lib/env";
+import { features } from "@/lib/features";
 import { mediaUrl } from "@/lib/media";
 import { breadcrumbJsonLd, listingJsonLd } from "@/lib/structured-data";
 
@@ -200,7 +201,7 @@ async function PropertyContent({ params }: { params: Promise<{ slug: string }> }
               <span className="text-sm text-muted">{p.type_name} · {p.code}</span>
               <span className="ml-auto flex gap-2">
                 <CompareButton pick={{ code: p.code, title: p.title, thumb: p.cover_thumb }} variant="page" />
-                <SaveButton propertyId={p.id} code={p.code} variant="page" />
+                {features.customerAccounts && <SaveButton propertyId={p.id} code={p.code} variant="page" />}
               </span>
             </div>
             <RecordView propertyId={p.id} />
@@ -422,7 +423,7 @@ async function PropertyContent({ params }: { params: Promise<{ slug: string }> }
                     }
                   />
                 </div>
-                {p.availability === "available" && (
+                {features.bookings && p.availability === "available" && (
                   <Link
                     href={`/book/${p.code}`}
                     className="mt-5 block rounded-xl border border-sand bg-sand-light/60 px-4 py-3 text-sm hover:border-forest"

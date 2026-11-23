@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 
+import '../../../core/features.dart';
 import '../../../core/browser.dart';
 import '../../../core/errors.dart';
 import '../../../core/formatting.dart';
@@ -229,11 +230,13 @@ class _EditorState extends ConsumerState<_Editor> {
           if (detail != null) ...[
             const _Divider(
               title: 'Activity',
-              subtitle: 'Enquiries, visits and bookings for this property.',
+              subtitle: Features.bookings
+                  ? 'Enquiries, visits and bookings for this property.'
+                  : 'Enquiries and visits for this property.',
             ),
             _EnquiriesSection(propertyId: detail.id),
             _SiteVisitsSection(propertyId: detail.id),
-            _BookingsSection(propertyId: detail.id),
+            if (Features.bookings) _BookingsSection(propertyId: detail.id),
             _HistorySection(propertyId: detail.id, code: detail.code),
           ],
         ];

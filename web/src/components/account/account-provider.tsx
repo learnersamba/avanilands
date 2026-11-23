@@ -11,6 +11,7 @@ import {
 } from "react";
 
 import { browserSupabase } from "@/lib/supabase/browser";
+import { features } from "@/lib/features";
 
 export type CustomerProfile = {
   full_name: string | null;
@@ -44,7 +45,8 @@ const AccountContext = createContext<AccountState | null>(null);
  * fill in once the page is running.
  */
 export function AccountProvider({ children }: { children: ReactNode }) {
-  const [ready, setReady] = useState(false);
+  // Accounts off (lib/features.ts): ready at once as a guest, no auth check.
+  const [ready, setReady] = useState(!features.customerAccounts);
   const [user, setUser] = useState<AccountState["user"]>(null);
   const [profile, setProfile] = useState<CustomerProfile | null>(null);
   const [saved, setSaved] = useState<ReadonlySet<string>>(new Set());
@@ -83,6 +85,7 @@ export function AccountProvider({ children }: { children: ReactNode }) {
   }, []);
 
   useEffect(() => {
+    if (!features.customerAccounts) return;
     const supabase = browserSupabase();
     const { data } = supabase.auth.onAuthStateChange((_event, session) => {
       const next = session?.user

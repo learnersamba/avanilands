@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 
+import '../../core/features.dart';
 import '../../core/browser.dart';
 import '../auth/auth_controller.dart';
 import '../bookings/bookings_repository.dart';
@@ -51,12 +52,14 @@ class _EnquiryAlertsState extends ConsumerState<EnquiryAlerts> {
               ..invalidate(notificationsProvider);
           },
         ),
-      )
-      ..add(
+      );
+    if (Features.bookings) {
+      _stops.add(
         ref
             .read(bookingsRepositoryProvider)
             .watch(onInsert: _announceBooking, onChange: _refreshBookings),
       );
+    }
   }
 
   @override

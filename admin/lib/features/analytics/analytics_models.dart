@@ -52,16 +52,21 @@ class AnalyticsRange {
     };
   }
 
-  /// A chosen period: at most a year, nothing after today.
+  /// Page views are kept about 6 months (cleanup_analytics, decision 132),
+  /// enough for "last 90 days" compared with the 90 days before.
+  static const keptDays = 182;
+
+  /// A chosen period: only days whose page views are still kept, nothing
+  /// after today.
   factory AnalyticsRange.custom(DateTime from, DateTime to, {DateTime? today}) {
     final day = today ?? indiaToday();
+    final oldest = day.subtract(const Duration(days: keptDays));
     var start = DateTime.utc(from.year, from.month, from.day);
     var end = DateTime.utc(to.year, to.month, to.day);
     if (end.isAfter(day)) end = day;
+    if (end.isBefore(oldest)) end = oldest;
+    if (start.isBefore(oldest)) start = oldest;
     if (start.isAfter(end)) start = end;
-    if (end.difference(start).inDays > 365) {
-      start = end.subtract(const Duration(days: 365));
-    }
     return AnalyticsRange._('custom', start, end);
   }
 

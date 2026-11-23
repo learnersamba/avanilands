@@ -2,6 +2,7 @@ import { Phone } from "lucide-react";
 import Link from "next/link";
 
 import { AccountLink } from "@/components/account/account-link";
+import { features } from "@/lib/features";
 import { MobileMenu } from "@/components/mobile-menu";
 import { Container } from "@/components/ui";
 import { getSiteSettings } from "@/lib/data";
@@ -90,7 +91,7 @@ export async function SiteHeader() {
               <Phone className="h-5 w-5" aria-hidden />
             </a>
           )}
-          <AccountLink />
+          {features.customerAccounts && <AccountLink />}
           <MobileMenu links={navLinks} />
         </div>
       </Container>

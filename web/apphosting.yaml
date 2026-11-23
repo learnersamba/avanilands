@@ -1,0 +1,70 @@
+# Firebase App Hosting: the website (decision 132). Backend root directory: web
+# Secrets live in Google Cloud Secret Manager; set them once with
+#   npx firebase-tools apphosting:secrets:set <name> --project avanilands
+# (see docs/DEPLOY.md §5). Public values are written here.
+
+runConfig:
+  # One server: Next.js refreshes its cache only on the server that receives
+  # the refresh call, so a second server would keep showing old pages.
+  # One server handles far more traffic than a land-sales site gets.
+  minInstances: 0
+  maxInstances: 1
+  concurrency: 80
+  cpu: 1
+  memoryMiB: 1024
+
+env:
+  # Pages are not stored at the CDN (next.config.ts): admin changes show at once.
+  - variable: CDN_PAGE_CACHE
+    value: "off"
+    availability: [BUILD, RUNTIME]
+  - variable: NEXT_PUBLIC_SITE_URL
+    value: https://avanilands.in
+    availability: [BUILD, RUNTIME]
+  - variable: NEXT_PUBLIC_SUPABASE_URL
+    value: https://vyfooevrfflmbihmahap.supabase.co
+    availability: [BUILD, RUNTIME]
+  - variable: NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY
+    value: sb_publishable_l316j0OUVLucJ_VLQbm5eA_chXoXlPI
+    availability: [BUILD, RUNTIME]
+  - variable: ADMIN_URL
+    value: https://admin.avanilands.in
+    availability: [RUNTIME]
+  - variable: EMAIL_FROM
+    value: Avanilands <enquiries@avanilands.in>
+    availability: [RUNTIME]
+  # Public keys of outside services, filled in when the accounts exist
+  # (until then forms refuse submissions in production and maps use OSM).
+  # - variable: NEXT_PUBLIC_TURNSTILE_SITE_KEY
+  #   value: <site key>
+  #   availability: [BUILD, RUNTIME]
+  # - variable: NEXT_PUBLIC_MAP_TILE_URL
+  #   value: https://api.maptiler.com/maps/streets-v2/{z}/{x}/{y}.png?key=<key>
+  #   availability: [BUILD, RUNTIME]
+  # - variable: NEXT_PUBLIC_MAP_ATTRIBUTION
+  #   value: "&copy; MapTiler &copy; OpenStreetMap contributors"
+  #   availability: [BUILD, RUNTIME]
+
+  # Secrets (server only).
+  - variable: SUPABASE_SECRET_KEY
+    secret: supabase-secret-key
+    availability: [RUNTIME]
+  - variable: REVALIDATE_SECRET
+    secret: revalidate-secret
+    availability: [RUNTIME]
+  - variable: IP_HASH_SALT
+    secret: ip-hash-salt
+    availability: [RUNTIME]
+  - variable: CRON_SECRET
+    secret: cron-secret
+    availability: [RUNTIME]
+  # Uncomment once each account exists and its secret is set:
+  # - variable: TURNSTILE_SECRET_KEY
+  #   secret: turnstile-secret-key
+  #   availability: [RUNTIME]
+  # - variable: RESEND_API_KEY
+  #   secret: resend-api-key
+  #   availability: [RUNTIME]
+  # - variable: SALES_NOTIFY_EMAIL
+  #   value: <sales inbox>
+  #   availability: [RUNTIME]

@@ -1,7 +1,5 @@
 "use server";
 
-import { after } from "next/server";
-
 import { getSiteSettings } from "@/lib/data";
 import {
   availableVisitDates,
@@ -21,7 +19,7 @@ import { hashIp, visitorIp } from "@/lib/visitor";
  * Site visit form → validation (including the day and time) → bot check →
  * database (submit_site_visit checks everything again, applies the hourly
  * limit and returns an open request instead of a second one) → confirmation.
- * Emails go out after the reply is sent.
+ * Emails are sent before replying (not after(), see enquiry-actions.ts).
  */
 export async function submitSiteVisit(_previous: SiteVisitState, form: FormData): Promise<SiteVisitState> {
   const raw = Object.fromEntries(
@@ -104,7 +102,11 @@ export async function submitSiteVisit(_previous: SiteVisitState, form: FormData)
     visit_date: string;
     slot: string;
   };
-  if (!result.duplicate) after(() => sendVisitRequestEmails(result.id));
+  if (!result.duplicate) {
+    await sendVisitRequestEmails(result.id).catch((error) =>
+      console.error("Site visit emails failed", error),
+    );
+  }
   return {
     status: "sent",
     reference: result.reference,

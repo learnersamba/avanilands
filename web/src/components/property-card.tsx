@@ -2,6 +2,7 @@ import { ArrowRight, MapPin, Ruler, Sparkles, Star } from "lucide-react";
 import Link from "next/link";
 
 import { SaveButton } from "@/components/account/save-button";
+import { features } from "@/lib/features";
 import { CompareButton } from "@/components/compare/compare-button";
 import { StatusBadge, StatusRibbon } from "@/components/ui";
 import type { PropertyCardData } from "@/lib/data";
@@ -70,7 +71,7 @@ export function PropertyCard({
           <span className="rounded-full bg-white/95 shadow-sm">
             <CompareButton pick={{ code: property.code, title: property.title, thumb: property.cover_thumb }} />
           </span>
-          <SaveButton propertyId={property.id} code={property.code} />
+          {features.customerAccounts && <SaveButton propertyId={property.id} code={property.code} />}
         </div>
       </div>
 

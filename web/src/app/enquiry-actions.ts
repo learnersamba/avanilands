@@ -1,7 +1,5 @@
 "use server";
 
-import { after } from "next/server";
-
 import { getSiteSettings } from "@/lib/data";
 import { sendEmail } from "@/lib/email";
 import { customerEnquiryEmail, type EnquiryEmailData, salesEnquiryEmail } from "@/lib/email-templates";
@@ -15,7 +13,10 @@ import { hashIp, visitorIp } from "@/lib/visitor";
 /**
  * Enquiry form → validation → bot check → database (submit_enquiry, which
  * also applies the hourly limit and checks the property can still be
- * enquired about) → confirmation. Emails go out after the reply is sent.
+ * enquired about) → emails → confirmation. Emails are sent before replying,
+ * not with after(): hosts that pause the server between requests (Cloud Run,
+ * Firebase App Hosting) could hold them back. A failed email never fails the
+ * enquiry (it is already saved).
  */
 export async function submitEnquiry(_previous: EnquiryState, form: FormData): Promise<EnquiryState> {
   const raw = {
@@ -91,8 +92,10 @@ export async function submitEnquiry(_previous: EnquiryState, form: FormData): Pr
 
   const result = data as { id: string; reference: string; duplicate: boolean };
   if (!result.duplicate) {
-    // After the visitor has their confirmation: notify sales and the customer.
-    after(() => sendEnquiryEmails(result.reference, input));
+    // Notify sales and the customer (the enquiry is saved either way).
+    await sendEnquiryEmails(result.reference, input).catch((error) =>
+      console.error("Enquiry emails failed", error),
+    );
   }
   return { status: "sent", reference: result.reference, duplicate: result.duplicate };
 }

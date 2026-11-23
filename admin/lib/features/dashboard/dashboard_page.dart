@@ -3,6 +3,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import 'package:intl/intl.dart';
 
+import '../../core/features.dart';
 import '../../core/formatting.dart';
 import '../../core/theme.dart';
 import '../../core/widgets/common.dart';
@@ -145,7 +146,7 @@ class _Hero extends StatelessWidget {
           '${s.requestedSiteVisits} ${plural(s.requestedSiteVisits, 'visit', 'visits')} to confirm',
           '/site-visits?status=requested&when=all',
         ),
-      if (s != null && s.bookingsToReview > 0)
+      if (Features.bookings && s != null && s.bookingsToReview > 0)
         _Todo(
           Icons.sell_outlined,
           '${s.bookingsToReview} ${plural(s.bookingsToReview, 'booking', 'bookings')} to review',
@@ -451,14 +452,15 @@ class _KpiGrid extends ConsumerWidget {
         note: '${summary.siteVisitsNext7Days} confirmed in the next 7 days',
         route: '/site-visits?status=requested&when=all',
       ),
-      _KpiCard(
-        tone: _KpiTone.lavender,
-        icon: Icons.sell_outlined,
-        value: summary.bookingsToReview,
-        label: 'Bookings to review',
-        note: '${summary.bookingsInProgress} approved, in progress',
-        route: '/bookings',
-      ),
+      if (Features.bookings)
+        _KpiCard(
+          tone: _KpiTone.lavender,
+          icon: Icons.sell_outlined,
+          value: summary.bookingsToReview,
+          label: 'Bookings to review',
+          note: '${summary.bookingsInProgress} approved, in progress',
+          route: '/bookings',
+        ),
       _KpiCard(
         tone: _KpiTone.sky,
         icon: Icons.groups_outlined,

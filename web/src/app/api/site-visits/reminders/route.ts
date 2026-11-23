@@ -3,10 +3,11 @@ import { sendCustomerVisitEmail } from "@/lib/site-visit-server";
 import { createAdminClient } from "@/lib/supabase/admin";
 
 /**
- * Daily job (Vercel Cron, see vercel.json): reminds customers of their
- * confirmed visit tomorrow, and clears notifications older than 90 days and
- * page views older than 13 months.
- * Vercel sends "Authorization: Bearer <CRON_SECRET>".
+ * Daily job, started at 09:00 India time by the database's scheduler
+ * (private.run_daily_website_job, decision 132; or Vercel Cron via
+ * vercel.json): reminds customers of their confirmed visit tomorrow, and
+ * clears notifications older than 90 days and page views older than 6 months.
+ * The caller sends "Authorization: Bearer <CRON_SECRET>".
  * Each visit is claimed once in the database, so a repeated run sends nothing.
  */
 export async function GET(request: Request) {

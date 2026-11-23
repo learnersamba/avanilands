@@ -3,6 +3,7 @@ import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 
+import '../../core/features.dart';
 import '../../core/theme.dart';
 import '../auth/admin_user.dart';
 import '../auth/auth_controller.dart';
@@ -33,7 +34,7 @@ const _items = [
   _NavItem('/properties', 'Properties', Icons.layers_outlined),
   _NavItem('/enquiries', 'Enquiries', Icons.mail_outline),
   _NavItem('/site-visits', 'Site visits', Icons.calendar_today_outlined),
-  _NavItem('/bookings', 'Bookings', Icons.sell_outlined),
+  if (Features.bookings) _NavItem('/bookings', 'Bookings', Icons.sell_outlined),
   _NavItem('/analytics', 'Analytics', Icons.bar_chart_rounded),
   _NavItem('/locations', 'Locations & lists', Icons.place_outlined),
   _NavItem('/activity', 'Activity log', Icons.history),
@@ -555,7 +556,7 @@ class _QuickSearchState extends ConsumerState<_QuickSearch> {
       }
       _text.clear();
       context.go('/properties/$id');
-    } else if (upper.startsWith('BKG-')) {
+    } else if (Features.bookings && upper.startsWith('BKG-')) {
       _text.clear();
       context.go(
         Uri(

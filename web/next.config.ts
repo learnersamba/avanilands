@@ -62,8 +62,44 @@ const nextConfig: NextConfig = {
       },
     },
   },
+  // www.<domain> → <domain> on any host (Firebase App Hosting serves both
+  // names; decision 132). Only when the site address is a real domain.
+  async redirects() {
+    const site = (() => {
+      try {
+        return new URL(process.env.NEXT_PUBLIC_SITE_URL ?? "");
+      } catch {
+        return null;
+      }
+    })();
+    if (!site || site.hostname === "localhost" || site.hostname.startsWith("www.")) return [];
+    return [
+      {
+        source: "/:path*",
+        has: [{ type: "host" as const, value: `www.${site.hostname}` }],
+        destination: `${site.origin}/:path*`,
+        permanent: true,
+      },
+    ];
+  },
   async headers() {
-    return [{ source: "/:path*", headers: securityHeaders }];
+    return [
+      { source: "/:path*", headers: securityHeaders },
+      // Hosts whose CDN can't be told about cache refreshes (Firebase App
+      // Hosting, decision 132; set in apphosting.yaml): pages must not be
+      // stored at the CDN, or admin changes would show up to an hour late.
+      // The server's own cache still answers fast and is refreshed at once.
+      // Files under /_next/static, /api answers and files with an extension
+      // (images, sitemap.xml, robots.txt) keep their own caching.
+      ...(process.env.CDN_PAGE_CACHE === "off"
+        ? [
+            {
+              source: "/((?!_next/|api/|.*\\.[a-z0-9]+$).*)",
+              headers: [{ key: "Cache-Control", value: "private, no-cache, max-age=0, must-revalidate" }],
+            },
+          ]
+        : []),
+    ];
   },
 };
 

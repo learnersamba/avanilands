@@ -2,6 +2,7 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 
+import '../features.dart';
 import '../../features/activity/activity_page.dart';
 import '../../features/admins/admins_page.dart';
 import '../../features/auth/auth_controller.dart';
@@ -101,18 +102,19 @@ final routerProvider = Provider<GoRouter>((ref) {
               ),
             ],
           ),
-          GoRoute(
-            path: '/bookings',
-            builder: (_, state) =>
-                BookingsPage(query: BookingQuery.fromUri(state.uri)),
-            routes: [
-              GoRoute(
-                path: ':id',
-                builder: (_, state) =>
-                    BookingDetailPage(id: state.pathParameters['id']!),
-              ),
-            ],
-          ),
+          if (Features.bookings)
+            GoRoute(
+              path: '/bookings',
+              builder: (_, state) =>
+                  BookingsPage(query: BookingQuery.fromUri(state.uri)),
+              routes: [
+                GoRoute(
+                  path: ':id',
+                  builder: (_, state) =>
+                      BookingDetailPage(id: state.pathParameters['id']!),
+                ),
+              ],
+            ),
           GoRoute(path: '/locations', builder: (_, _) => const LookupsPage()),
           GoRoute(path: '/activity', builder: (_, _) => const ActivityPage()),
           GoRoute(path: '/settings', builder: (_, _) => const SettingsPage()),

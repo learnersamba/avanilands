@@ -1,10 +1,12 @@
 import type { Metadata } from "next";
+import { notFound } from "next/navigation";
 import { Suspense } from "react";
 
 import { BookingRequest } from "@/components/booking/booking-request";
 import { ButtonLink, Container } from "@/components/ui";
 import { parseCodes } from "@/lib/compare";
 import { getComparison } from "@/lib/data";
+import { features } from "@/lib/features";
 
 export const metadata: Metadata = {
   title: "Request to book",
@@ -12,6 +14,7 @@ export const metadata: Metadata = {
 };
 
 export default function BookPage(props: PageProps<"/book/[code]">) {
+  if (!features.bookings) notFound();
   return (
     <Container className="max-w-3xl py-12">
       <Suspense fallback={<p className="text-muted">Loading…</p>}>

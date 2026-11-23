@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 
+import '../../core/features.dart';
 import '../../core/browser.dart';
 import '../../core/errors.dart';
 import '../../core/formatting.dart';
@@ -177,8 +178,9 @@ class _VisitCard extends ConsumerWidget {
           child: const Text('No-show'),
         ),
       ],
-      if (status == SiteVisitStatus.completed ||
-          status == SiteVisitStatus.confirmed)
+      if (Features.bookings &&
+          (status == SiteVisitStatus.completed ||
+              status == SiteVisitStatus.confirmed))
         OutlinedButton.icon(
           onPressed: () => startBooking(
             context,

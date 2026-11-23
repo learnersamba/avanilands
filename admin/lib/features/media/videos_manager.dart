@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
+import '../../core/features.dart';
 import '../../core/browser_files.dart';
 import '../../core/errors.dart';
 import '../../core/storage_upload.dart';
@@ -179,21 +180,24 @@ class _VideosManagerState extends ConsumerState<VideosManager> {
             icon: const Icon(Icons.smart_display_outlined, size: 18),
             label: const Text('Add YouTube link'),
           ),
-          OutlinedButton.icon(
-            onPressed: _busy || _upload?.status == UploadStatus.uploading
-                ? null
-                : _uploadMp4,
-            icon: const Icon(Icons.upload, size: 18),
-            label: const Text('Upload MP4'),
-          ),
+          if (Features.videoUploads)
+            OutlinedButton.icon(
+              onPressed: _busy || _upload?.status == UploadStatus.uploading
+                  ? null
+                  : _uploadMp4,
+              icon: const Icon(Icons.upload, size: 18),
+              label: const Text('Upload MP4'),
+            ),
         ],
       ),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.stretch,
         children: [
           Text(
-            'YouTube is recommended (unlisted is fine): it is free and plays smoothly on phones. '
-            'MP4 uploads are limited to 50 MB.',
+            Features.videoUploads
+                ? 'YouTube is recommended (unlisted is fine): it is free and plays smoothly on phones. '
+                      'MP4 uploads are limited to 50 MB.'
+                : 'Add videos as YouTube links (unlisted is fine): free, and they play smoothly on phones.',
             style: Theme.of(context).textTheme.bodySmall,
           ),
           const SizedBox(height: 12),

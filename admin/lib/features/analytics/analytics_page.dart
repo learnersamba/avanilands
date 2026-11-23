@@ -18,10 +18,10 @@ class AnalyticsPage extends ConsumerWidget {
     final today = indiaToday();
     final picked = await showDateRangePicker(
       context: context,
-      firstDate: DateTime.utc(today.year - 2),
+      firstDate: today.subtract(const Duration(days: AnalyticsRange.keptDays)),
       lastDate: today,
       initialDateRange: DateTimeRange(start: range.from, end: range.to),
-      helpText: 'Choose dates (up to a year)',
+      helpText: 'Choose dates (the last 6 months)',
     );
     if (picked == null || !context.mounted) return;
     context.go(AnalyticsRange.custom(picked.start, picked.end).location);

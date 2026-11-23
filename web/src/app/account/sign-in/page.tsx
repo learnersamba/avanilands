@@ -1,8 +1,10 @@
 import type { Metadata } from "next";
+import { notFound } from "next/navigation";
 import { Suspense } from "react";
 
 import { SignInForm } from "@/components/account/sign-in-form";
 import { Container } from "@/components/ui";
+import { features } from "@/lib/features";
 
 export const metadata: Metadata = {
   title: "Sign in",
@@ -12,6 +14,7 @@ export const metadata: Metadata = {
 };
 
 export default function SignInPage() {
+  if (!features.customerAccounts) notFound();
   return (
     <Container className="max-w-md py-14">
       <h1 className="font-serif text-3xl text-forest">Sign in</h1>
