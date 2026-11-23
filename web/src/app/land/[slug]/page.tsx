@@ -59,7 +59,9 @@ import { breadcrumbJsonLd, listingJsonLd } from "@/lib/structured-data";
 
 export async function generateStaticParams() {
   const slugs = await getPublishedSlugs();
-  return slugs.map((slug) => ({ slug }));
+  // Cache Components needs at least one entry, or the build fails while
+  // nothing is published yet. The placeholder matches no property ("not found").
+  return slugs.length > 0 ? slugs.map((slug) => ({ slug })) : [{ slug: "_none" }];
 }
 
 export async function generateMetadata(props: PageProps<"/land/[slug]">): Promise<Metadata> {

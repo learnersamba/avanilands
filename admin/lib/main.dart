@@ -13,7 +13,7 @@ Future<void> main() async {
   usePathUrlStrategy();
   installBeforeUnloadGuard();
   if (!Env.isConfigured) {
-    runApp(const _MissingConfigApp());
+    runApp(const ProviderScope(child: _MissingConfigApp()));
     return;
   }
   await Supabase.initialize(

@@ -19,10 +19,14 @@ const ALL = "land";
 export async function generateStaticParams() {
   const combos = await getLandingCombos();
   const cities = [...new Set(combos.map((c) => c.location_slug))];
-  return [
+  const params = [
     ...cities.map((city) => ({ landing: `${ALL}-for-sale`, city })),
     ...combos.map((c) => ({ landing: `${c.type_seo_slug}-for-sale`, city: c.location_slug })),
   ];
+  // Cache Components needs at least one entry, or the build fails while
+  // nothing is listed yet (e.g. a fresh production database). The placeholder
+  // matches no place, so it renders "not found".
+  return params.length > 0 ? params : [{ landing: `${ALL}-for-sale`, city: "_none" }];
 }
 
 type Landing = {

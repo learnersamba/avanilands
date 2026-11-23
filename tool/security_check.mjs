@@ -166,6 +166,15 @@ for (const [who, token] of [['anon', null], ['signed-in non-admin', visitorToken
   check(!insert.ok, `${who} cannot add photos`, String(insert.status));
 }
 
+// Unknown and malformed property links: a real 404 for browsers and search engines
+{
+  const html = { headers: { accept: 'text/html' } };
+  const unknown = await fetch(`${WEB}/land/no-such-plot-anywhere`, html);
+  check(unknown.status === 404, 'unknown property link answers 404', String(unknown.status));
+  const malformed = await fetch(`${WEB}/land/%E0%A4`, html);
+  check(malformed.status === 404, 'malformed property link answers 404 (not 500)', String(malformed.status));
+}
+
 // Website statistics endpoint: tells a caller nothing, takes nothing big
 {
   const page = await fetch(`${WEB}/api/track`);

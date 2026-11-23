@@ -7,6 +7,8 @@
 set -euo pipefail
 root="$(cd "$(dirname "$0")/.." && pwd)"
 env_file="${1:-$root/admin/env/local.json}"
+# Absolute, so a relative path still works after the cd into admin/ below.
+env_file="$(cd "$(dirname "$env_file")" && pwd)/$(basename "$env_file")"
 supabase_url="$(python3 -c 'import json,sys; print(json.load(open(sys.argv[1]))["SUPABASE_URL"])' "$env_file")"
 realtime_url="${supabase_url/http/ws}"
 
