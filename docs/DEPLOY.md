@@ -6,8 +6,10 @@ Who does what: steps marked **(owner)** need the owner's accounts, payment or de
 
 What you need before starting:
 - The final **brand name and domain** (decision 5). Until then, staging can run on the free Vercel/Cloudflare addresses.
-- Accounts: Supabase, Vercel, Cloudflare (domain DNS, Pages, Turnstile), Resend. Use a shared company email, not a personal one, and turn on two-factor sign-in everywhere.
+- Production (decision 131): domain **avanilands.in** (DNS at GoDaddy), website on **Vercel**, admin panel on **Firebase Hosting** (project `avanilands`), Supabase project `vyfooevrfflmbihmahap` (Mumbai).
+- Accounts: Supabase, Vercel, Firebase, GoDaddy (DNS), Cloudflare (Turnstile only), Resend. Use a shared company email, not a personal one, and turn on two-factor sign-in everywhere.
 - On the developer's laptop: this folder, Node 22, Flutter, Supabase CLI, Docker.
+- **Secrets**: keep them in the company password manager. A gitignored `.env.production-setup` in the project folder can hold them while setting up (Vercel variables + the vault SQL of step 1.8); delete it afterwards.
 
 ---
 
@@ -59,9 +61,9 @@ OpenStreetMap's own servers are not for public website traffic. Create a free ac
 
 ## 4. Resend (email)
 
-1. **(owner)** Resend → **Domains → Add** `<domain>`; add the DNS records it shows (SPF, DKIM, and a DMARC record such as `v=DMARC1; p=none; rua=mailto:dmarc@<domain>`) in Cloudflare DNS; wait for "Verified".
+1. **(owner)** Resend → **Domains → Add** `<domain>`; add the DNS records it shows (SPF, DKIM, and a DMARC record such as `v=DMARC1; p=none; rua=mailto:dmarc@<domain>`) in the domain's DNS (GoDaddy, step 9); wait for "Verified".
 2. Create an API key with **Sending access** only, restricted to that domain.
-3. Send a test enquiry once the website is up (step 9): sales and customer emails must arrive and not land in spam.
+3. Send a test enquiry once the website is up (step 10): sales and customer emails must arrive and not land in spam.
 
 ## 5. Website on Vercel
 
@@ -88,26 +90,27 @@ OpenStreetMap's own servers are not for public website traffic. Create a free ac
 3. **Domains**: add `<domain>` and `www.<domain>`; set `www` to redirect (308) to `<domain>`. Vercel issues HTTPS certificates automatically.
 4. Deploy, then open `https://<domain>`: properties, photos and the map must show.
 
-## 6. Admin panel on Cloudflare Pages
+## 6. Admin panel on Firebase Hosting
 
-Cloudflare's build machines don't have Flutter, so build on the laptop and upload:
+Built on the laptop (no Flutter on hosting build machines) and uploaded. `tool/build_admin.sh` writes `admin/build/firebase.json` with the security headers (Content-Security-Policy for this Supabase project), app routing and no-cache, so every deploy is picked up at once.
 
 1. Create `admin/env/production.json` (never shared, like `local.json`):
    ```json
    { "APP_ENV": "production", "SUPABASE_URL": "https://<ref>.supabase.co",
      "SUPABASE_PUBLISHABLE_KEY": "sb_publishable_…", "WEBSITE_URL": "https://<domain>" }
    ```
-2. Build (adds the security headers and app routing for this Supabase project) and upload:
+2. First time on this laptop: `npx firebase-tools login` (the Google account that owns the Firebase project).
+3. Build and publish:
    ```bash
-   tool/build_admin.sh admin/env/production.json
-   npx wrangler pages deploy admin/build/web --project-name avanilands-admin
+   tool/deploy_admin.sh admin/env/production.json      # Firebase project "avanilands"
    ```
-3. Cloudflare Pages → the project → **Custom domains** → `admin.<domain>`.
-4. Optional extra lock: **Cloudflare Zero Trust → Access** on `admin.<domain>` allowing only company email addresses (a second sign-in before the panel even loads).
+   It prints the Hosting address (`https://avanilands.web.app`); the sign-in page must open there.
+4. Firebase console → **Hosting → Add custom domain** → `admin.<domain>`. Add the records it shows in GoDaddy (step 9); Firebase then issues the HTTPS certificate (can take up to a few hours).
+5. (Cloudflare Pages still works the same way if ever needed: `npx wrangler pages deploy admin/build/web` uses the `_headers` and `_redirects` files in the build.)
 
 ## 7. Search engines and analytics
 
-1. **(owner)** Google Search Console → add the domain (DNS verification in Cloudflare) → **Sitemaps** → submit `https://<domain>/sitemap.xml`.
+1. **(owner)** Google Search Console → add the domain (DNS verification: a TXT record in GoDaddy) → **Sitemaps** → submit `https://<domain>/sitemap.xml`.
 2. Analytics are built in (Phase 16, no extra service or cookies). After launch, open a few pages on a phone and check they appear in the admin's **Analytics** page within seconds. `IP_HASH_SALT` must be set (step above); changing it later only means visitors that day may be counted twice.
 
 ## 8. Error alerts
@@ -116,12 +119,31 @@ Cloudflare's build machines don't have Flutter, so build on the laptop and uploa
 - Supabase → **Reports / Logs** and **Advisors** (security and performance warnings — should stay empty).
 - Optional later: Sentry (free tier) for both apps; not added yet to keep the browser code small (decision 70).
 
-## 9. Final checks before telling anyone
+## 9. Domain records at GoDaddy
+
+GoDaddy → **My Products → avanilands.in → DNS**. Always copy the exact values each service shows (they can differ per project); typical values:
+
+| Type | Name | Value | For |
+|------|------|-------|-----|
+| A | `@` | the IP Vercel shows (e.g. `76.76.21.21`) | website |
+| CNAME | `www` | the target Vercel shows (e.g. `cname.vercel-dns.com`) | website (`www` → redirect) |
+| TXT | `admin` (or `@`) | the verification value Firebase shows | admin domain check |
+| A | `admin` | the IP(s) Firebase shows | admin panel |
+| TXT / CNAME / MX | as Resend shows (`resend._domainkey`, `send`, …) | as Resend shows | email (SPF, DKIM) |
+| TXT | `_dmarc` | `v=DMARC1; p=none; rua=mailto:dmarc@<domain>` | email |
+| TXT | `@` | the value Search Console shows | Google |
+
+- Delete GoDaddy's default **parked** `A @` record and the default `CNAME www → @` before adding Vercel's, or they clash.
+- Keep any existing **MX** records if the company already receives email at this domain.
+- New records usually work within minutes; allow up to 48 hours.
+
+## 10. Final checks before telling anyone
 
 Run on staging, then on production (production: only steps that don't create test data, plus one real enquiry you then close):
 
 - [ ] `WEB_URL=https://<domain> SUPABASE_URL=… SUPABASE_PUBLISHABLE_KEY=… ADMIN_EMAIL=… ADMIN_PASSWORD=… VISITOR_EMAIL=… VISITOR_PASSWORD=… node tool/security_check.mjs` → ALL PASSED (**staging only**: it uploads and deletes test files; the visitor is a signed-in non-admin test user created for this)
 - [ ] securityheaders.com on `https://<domain>` and `https://admin.<domain>`: grade A
+- [ ] Firebase Hosting → Usage: the admin is served from `admin.<domain>` with a valid certificate
 - [ ] `http://<domain>` and `https://www.<domain>` both end at `https://<domain>`
 - [ ] Supabase Advisors: no security warnings
 - [ ] The journey from a real phone: publish a property in the admin → find it on the website → send an enquiry → sales email arrives → mark it Contacted with a note
@@ -139,5 +161,5 @@ Run on staging, then on production (production: only steps that don't create tes
 
 - Database changes: `supabase db push` (staging first).
 - Website: Vercel deploys automatically from the main branch once git is set up.
-- Admin: repeat step 6.2.
+- Admin: `tool/deploy_admin.sh admin/env/production.json` (step 6.3).
 - Edge Function changes: `supabase functions deploy invite-admin`.

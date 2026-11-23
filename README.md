@@ -205,6 +205,7 @@ tool/seed_photos.sh
 | Rebuild the database from scratch | `supabase db reset` |
 | Restart Edge Functions after an edit | `docker restart supabase_edge_runtime_avanilands` |
 | Admin build for hosting | `tool/build_admin.sh admin/env/<env>.json` |
+| Publish the admin (Firebase Hosting) | `tool/deploy_admin.sh admin/env/production.json` |
 
 ---
 

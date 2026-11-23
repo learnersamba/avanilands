@@ -85,7 +85,7 @@ Form (browser) → Server Action
 | Maps | `flutter_map` for the location picker (tap to drop a pin, or type coordinates) |
 | Images | Picked in the browser, shrunk to WebP 400 / 1200 / 2000 px, uploaded to Storage, then a row is added to `property_images` |
 | Live updates | Supabase Realtime on `enquiries` for the "new enquiry" badge |
-| Hosting | Cloudflare Pages, separate address (e.g. `admin.<domain>`), `noindex` |
+| Hosting | Firebase Hosting (decision 131), separate address `admin.avanilands.in`, `noindex` |
 
 The admin app is only a convenience. **Every rule is enforced in the database** (RLS policies, constraints, functions), so a customer calling the API directly with their own login can't do admin things.
 
@@ -122,8 +122,8 @@ The admin app is only a convenience. **Every rule is enforced in the database** 
 | Env | Supabase | Website | Admin |
 |-----|----------|---------|-------|
 | Local | Supabase CLI (Docker) on this laptop | `npm run dev` | `flutter run -d chrome` |
-| Staging | Cloud project "avanilands-staging" (Free plan, Mumbai) | Vercel preview | Cloudflare Pages preview |
-| Production | Cloud project "avanilands-prod" (Pro plan, Mumbai) | Vercel production + custom domain | Cloudflare Pages + `admin.` subdomain |
+| Staging | Cloud project "avanilands-staging" (Free plan, Mumbai) | Vercel preview | Firebase Hosting preview channel |
+| Production | Cloud project "avanilands" (`vyfooevrfflmbihmahap`, Mumbai) | Vercel production + `avanilands.in` | Firebase Hosting + `admin.avanilands.in` |
 
 Database changes only go through migration files, applied local → staging → production.
 
@@ -133,7 +133,7 @@ Database changes only go through migration files, applied local → staging → 
 |------|-------------|--------------|
 | Supabase | Free | Pro ~$25/month |
 | Website hosting | Free (Vercel Hobby, non-commercial while building) | Vercel Pro ~$20/month (or Cloudflare, free) |
-| Admin hosting | Free (Cloudflare Pages) | Free |
+| Admin hosting | Free (Firebase Hosting, Spark plan) | Free |
 | Email (Resend) | Free (3,000/month) | Free at our volume |
 | Bot check (Turnstile) | Free | Free |
 | Maps | Free tier | Free tier; Google Maps only if chosen |

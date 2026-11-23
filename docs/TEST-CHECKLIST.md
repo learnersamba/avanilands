@@ -96,4 +96,4 @@ Automated checks covered Chrome only. Before launch, on **staging**, someone ope
 
 ## Before launch (from the plan)
 
-Functional ✅ · Security ✅ (local; repeat on staging) · Performance ✅ (Lighthouse 90+) · Mobile 📱 · Browsers 📱 · SEO ✅ (sitemap, structured data, canonical links; Search Console at launch) · Analytics, backups on production, admin access, domain, SSL, production environment → [DEPLOY.md](DEPLOY.md) § 9.
+Functional ✅ · Security ✅ (local; repeat on staging) · Performance ✅ (Lighthouse 90+) · Mobile 📱 · Browsers 📱 · SEO ✅ (sitemap, structured data, canonical links; Search Console at launch) · Analytics, backups on production, admin access, domain, SSL, production environment → [DEPLOY.md](DEPLOY.md) § 10.
