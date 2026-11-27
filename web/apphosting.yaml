@@ -45,6 +45,14 @@ env:
   #   value: "&copy; MapTiler &copy; OpenStreetMap contributors"
   #   availability: [BUILD, RUNTIME]
 
+  # Meta (Facebook / Instagram) ads, decision 133 and docs/META-ADS.md.
+  # The pixel id is public. Nothing runs until a Super Admin also switches
+  # Advertising on in the admin panel (Settings), and then only for visitors
+  # who allow ad cookies.
+  # - variable: NEXT_PUBLIC_META_PIXEL_ID
+  #   value: <pixel / dataset id>
+  #   availability: [BUILD, RUNTIME]
+
   # Secrets (server only).
   - variable: SUPABASE_SECRET_KEY
     secret: supabase-secret-key
@@ -64,6 +72,13 @@ env:
   #   availability: [RUNTIME]
   # - variable: RESEND_API_KEY
   #   secret: resend-api-key
+  #   availability: [RUNTIME]
+  # - variable: META_CAPI_ACCESS_TOKEN
+  #   secret: meta-capi-access-token
+  #   availability: [RUNTIME]
+  # Only while testing (Events Manager → Test events), then remove:
+  # - variable: META_TEST_EVENT_CODE
+  #   value: TEST12345
   #   availability: [RUNTIME]
   # - variable: SALES_NOTIFY_EMAIL
   #   value: <sales inbox>

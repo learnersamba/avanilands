@@ -1,6 +1,7 @@
 "use server";
 
 import { getSiteSettings } from "@/lib/data";
+import { recordLead } from "@/lib/lead-tracking";
 import {
   availableVisitDates,
   explainVisitError,
@@ -103,9 +104,21 @@ export async function submitSiteVisit(_previous: SiteVisitState, form: FormData)
     slot: string;
   };
   if (!result.duplicate) {
-    await sendVisitRequestEmails(result.id).catch((error) =>
-      console.error("Site visit emails failed", error),
-    );
+    await Promise.all([
+      sendVisitRequestEmails(result.id).catch((error) => console.error("Site visit emails failed", error)),
+      // Campaign and Meta "Schedule" (decision 133; never fails the request).
+      recordLead({
+        kind: "site_visit",
+        id: result.id,
+        eventId: input.idempotencyKey,
+        eventName: "Schedule",
+        attribution: form.get("attribution"),
+        phone: input.phone,
+        email: input.email,
+        propertyId: input.propertyId,
+        ip,
+      }),
+    ]);
   }
   return {
     status: "sent",

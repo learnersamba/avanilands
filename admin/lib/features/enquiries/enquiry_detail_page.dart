@@ -47,6 +47,8 @@ class _Detail extends ConsumerWidget {
     final main = [
       _CustomerCard(enquiry: enquiry),
       if (enquiry.property != null) _PropertyCard(property: enquiry.property!),
+      if (enquiry.attribution != null)
+        CampaignCard(attribution: enquiry.attribution!),
       _Timeline(enquiry: enquiry),
     ];
     final side = [_UpdateCard(enquiry: enquiry), _AssignCard(enquiry: enquiry)];
@@ -249,6 +251,73 @@ class _PropertyCard extends StatelessWidget {
                 child: const Text('All enquiries for this property'),
               ),
             ],
+          ),
+        ],
+      ),
+    );
+  }
+}
+
+/// Which ad or link brought the request, and the visitor's ad-cookie answer
+/// (decision 133). Also used on site visits.
+class CampaignCard extends StatelessWidget {
+  const CampaignCard({
+    super.key,
+    required this.attribution,
+    this.reportedWhen = 'changing the status to Interested or Converted',
+  });
+
+  final LeadAttribution attribution;
+
+  /// Which status changes are reported to Meta.
+  final String reportedWhen;
+
+  @override
+  Widget build(BuildContext context) {
+    final textTheme = Theme.of(context).textTheme;
+    final rows = <(String, String?)>[
+      ('Source', attribution.source),
+      ('Medium', attribution.medium),
+      ('Campaign', attribution.campaign),
+      ('Ad / content', attribution.content),
+      ('Keyword', attribution.term),
+      ('First page', attribution.landingPath),
+    ];
+    return SectionCard(
+      title: 'Campaign',
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          if (!attribution.hasCampaign)
+            Padding(
+              padding: const EdgeInsets.only(bottom: 10),
+              child: Text(
+                'No campaign link: the customer came another way.',
+                style: textTheme.bodyMedium,
+              ),
+            ),
+          for (final (label, value) in rows)
+            if (value != null)
+              Padding(
+                padding: const EdgeInsets.only(bottom: 10),
+                child: Row(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    SizedBox(
+                      width: 140,
+                      child: Text(label, style: textTheme.bodySmall),
+                    ),
+                    Expanded(child: SelectableText(value)),
+                  ],
+                ),
+              ),
+          Text(
+            attribution.adConsent
+                ? 'Allowed ad cookies: $reportedWhen is reported to Meta (if '
+                      'advertising is on in Settings).'
+                : 'Did not allow ad cookies: nothing about this customer is '
+                      'reported to Meta.',
+            style: textTheme.bodySmall,
           ),
         ],
       ),

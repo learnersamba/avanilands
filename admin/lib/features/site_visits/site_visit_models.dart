@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 
 import '../../core/theme.dart';
-import '../enquiries/enquiry_models.dart' show formatIndianMobile;
+import '../enquiries/enquiry_models.dart' show LeadAttribution, formatIndianMobile;
 
 enum SiteVisitStatus {
   requested('requested', 'Requested'),
@@ -228,6 +228,7 @@ class SiteVisit {
     this.reminderSentAt,
     required this.property,
     this.customerId,
+    this.attribution,
   });
 
   factory SiteVisit.fromJson(Map<String, dynamic> json) => SiteVisit(
@@ -250,13 +251,15 @@ class SiteVisit {
       json['property'] as Map<String, dynamic>,
     ),
     customerId: json['customer_id'] as String?,
+    attribution: LeadAttribution.parse(json['attribution']),
   );
 
   static const select =
       'id, reference, name, phone, email, visitors, visit_date, slot, message, '
       'status, assigned_to, created_at, reminder_sent_at, customer_id, '
       'property:properties(id, code, title, slug, publish_state, availability, '
-      'locality, location:locations(city))';
+      'locality, location:locations(city)), '
+      '${LeadAttribution.select}';
 
   final String id;
   final String reference;
@@ -275,6 +278,9 @@ class SiteVisit {
 
   /// Set when the customer has an account on the website (Phase 11).
   final String? customerId;
+
+  /// Campaign and ad-cookie consent (decision 133).
+  final LeadAttribution? attribution;
 
   String get when => '${formatVisitDay(visitDate)}, ${formatVisitSlot(slot)}';
 

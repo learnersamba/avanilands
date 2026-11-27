@@ -198,6 +198,61 @@ class EnquiryProperty {
   final String availability;
 }
 
+/// Which campaign brought a request, and whether the visitor allowed
+/// advertising cookies (decision 133). Null when neither applies.
+class LeadAttribution {
+  const LeadAttribution({
+    this.source,
+    this.medium,
+    this.campaign,
+    this.content,
+    this.term,
+    this.landingPath,
+    this.adConsent = false,
+  });
+
+  factory LeadAttribution.fromJson(Map<String, dynamic> json) =>
+      LeadAttribution(
+        source: json['utm_source'] as String?,
+        medium: json['utm_medium'] as String?,
+        campaign: json['utm_campaign'] as String?,
+        content: json['utm_content'] as String?,
+        term: json['utm_term'] as String?,
+        landingPath: json['landing_path'] as String?,
+        adConsent: json['ad_consent'] as bool? ?? false,
+      );
+
+  /// For embedding in a select (one row per request).
+  static const select =
+      'attribution:lead_attribution(utm_source, utm_medium, utm_campaign, '
+      'utm_content, utm_term, landing_path, ad_consent)';
+
+  /// PostgREST gives one object for a one-to-one link; older versions a list.
+  static LeadAttribution? parse(Object? value) {
+    if (value is Map<String, dynamic>) return LeadAttribution.fromJson(value);
+    if (value is List && value.isNotEmpty) {
+      return LeadAttribution.fromJson(value.first as Map<String, dynamic>);
+    }
+    return null;
+  }
+
+  final String? source;
+  final String? medium;
+  final String? campaign;
+  final String? content;
+  final String? term;
+  final String? landingPath;
+  final bool adConsent;
+
+  bool get hasCampaign => source != null || campaign != null;
+
+  /// "facebook / paid_social · vizag-plots-nov"
+  String get summary => [
+    [source, medium].whereType<String>().join(' / '),
+    ?campaign,
+  ].where((part) => part.isNotEmpty).join(' · ');
+}
+
 class Enquiry {
   const Enquiry({
     required this.id,
@@ -214,6 +269,7 @@ class Enquiry {
     this.lastContactedAt,
     this.property,
     this.customerId,
+    this.attribution,
   });
 
   factory Enquiry.fromJson(Map<String, dynamic> json) {
@@ -235,13 +291,15 @@ class Enquiry {
           : DateTime.parse(json['last_contacted_at'] as String),
       property: property == null ? null : EnquiryProperty.fromJson(property),
       customerId: json['customer_id'] as String?,
+      attribution: LeadAttribution.parse(json['attribution']),
     );
   }
 
   static const select =
       'id, reference, name, phone, email, preferred_contact, message, status, '
       'source, assigned_to, created_at, last_contacted_at, customer_id, '
-      'property:properties(id, code, title, slug, publish_state, availability)';
+      'property:properties(id, code, title, slug, publish_state, availability), '
+      '${LeadAttribution.select}';
 
   final String id;
   final String reference;
@@ -259,6 +317,9 @@ class Enquiry {
 
   /// Set when the customer has an account on the website (Phase 11).
   final String? customerId;
+
+  /// Campaign and ad-cookie consent (decision 133).
+  final LeadAttribution? attribution;
 
   String get propertyLabel => property?.code ?? 'General enquiry';
 
@@ -348,6 +409,7 @@ List<List<Object?>> enquiryCsvRows(
     'Assigned to',
     'Last contacted',
     'Source',
+    'Campaign',
     'Message',
   ],
   for (final e in enquiries)
@@ -364,6 +426,7 @@ List<List<Object?>> enquiryCsvRows(
       e.assignedTo == null ? '' : (adminNames[e.assignedTo] ?? 'Former admin'),
       e.lastContactedAt == null ? '' : formatDateTime(e.lastContactedAt!),
       humanize(e.source),
+      e.attribution?.summary,
       e.message,
     ],
 ];

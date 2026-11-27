@@ -32,6 +32,19 @@ void main() {
     expect(settings.toJson()['gst_number'], isNull);
   });
 
+  test('the Meta advertising switch is off unless the row says so', () {
+    expect(
+      SiteSettings.fromJson({'company_name': 'Avanilands'}).metaAdsEnabled,
+      isFalse,
+    );
+    final on = SiteSettings.fromJson({
+      'company_name': 'Avanilands',
+      'meta_ads_enabled': true,
+    });
+    expect(on.metaAdsEnabled, isTrue);
+    expect(on.toJson()['meta_ads_enabled'], isTrue);
+  });
+
   test('a GST number is 15 letters and digits, or empty', () {
     expect(Validators.gstNumber(null), isNull);
     expect(Validators.gstNumber('  '), isNull);

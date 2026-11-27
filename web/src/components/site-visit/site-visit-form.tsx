@@ -5,6 +5,8 @@ import { useActionState, useRef, useState, useSyncExternalStore } from "react";
 
 import { submitSiteVisit } from "@/app/site-visit-actions";
 import { usePrefill } from "@/components/account/use-prefill";
+import { AttributionInput } from "@/components/consent/attribution-input";
+import { useMetaEventOnce } from "@/components/consent/meta-events";
 import { Turnstile } from "@/components/enquiry/turnstile";
 import {
   availableVisitDates,
@@ -67,6 +69,12 @@ function SiteVisitFormRound({ propertyId, propertyCode, settings, whatsappHref, 
   const [checkAttempt, setCheckAttempt] = useState(0);
   const today = useToday();
   const dates = today ? availableVisitDates(settings, today) : [];
+  // Meta "Schedule" (only with ad-cookie consent); same id as the server's event.
+  useMetaEventOnce(state.status === "sent" && !state.alreadyBooked, "Schedule", idempotencyKey, {
+    content_category: "land",
+    content_ids: [propertyCode],
+    content_type: "product",
+  });
 
   if (state.status === "sent") {
     return (
@@ -131,6 +139,7 @@ function SiteVisitFormRound({ propertyId, propertyCode, settings, whatsappHref, 
     >
       <input type="hidden" name="propertyId" value={propertyId} />
       <input ref={keyInput} type="hidden" name="idempotencyKey" defaultValue="" />
+      <AttributionInput />
 
       {error && (
         <p role="alert" className="rounded-lg bg-red-50 px-3 py-2 text-sm text-red-800">

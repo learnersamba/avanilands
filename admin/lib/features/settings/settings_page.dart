@@ -78,6 +78,7 @@ class _SettingsFormState extends ConsumerState<_SettingsForm> {
     for (final key in _socialKeys)
       key: TextEditingController(text: widget.settings.socialLinks[key]),
   };
+  late bool _metaAds = widget.settings.metaAdsEnabled;
   bool _busy = false;
   DateTime? _savedAt;
 
@@ -172,6 +173,7 @@ class _SettingsFormState extends ConsumerState<_SettingsForm> {
                   .toList(),
               seoTitle: _text(_seoTitle),
               seoDescription: _text(_seoDescription),
+              metaAdsEnabled: _metaAds,
             ),
           );
       if (!mounted) return;
@@ -370,6 +372,37 @@ class _SettingsFormState extends ConsumerState<_SettingsForm> {
                   ),
                   maxLength: 170,
                   maxLines: 3,
+                ),
+              ],
+            ),
+          ),
+          const SizedBox(height: 24),
+          SectionCard(
+            title: 'Advertising (Meta: Facebook and Instagram)',
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                SwitchListTile(
+                  contentPadding: EdgeInsets.zero,
+                  value: _metaAds,
+                  onChanged: (value) => setState(() => _metaAds = value),
+                  title: const Text('Measure Meta ads on the website'),
+                  subtitle: const Text(
+                    'Visitors are asked for permission first. Only those who '
+                    'say yes are measured, and only their enquiries, site visit '
+                    'requests and later results (Interested, Converted, visit '
+                    'completed) are reported to Meta, with phone and email '
+                    'scrambled (hashed).',
+                  ),
+                ),
+                const SizedBox(height: 8),
+                Text(
+                  'Also needs the Meta pixel id and access token on the website '
+                  '(docs/META-ADS.md). Before switching on, make sure the privacy '
+                  'policy (Website content → Privacy) describes Meta advertising. '
+                  'Switching off stops everything at once; nothing already sent '
+                  'can be taken back from Meta.',
+                  style: Theme.of(context).textTheme.bodySmall,
                 ),
               ],
             ),

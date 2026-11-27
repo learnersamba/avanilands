@@ -14,6 +14,7 @@ import '../auth/auth_controller.dart';
 import '../bookings/booking_detail_page.dart' show startBooking;
 import '../dashboard/dashboard_repository.dart';
 import '../enquiries/enquiries_page.dart' show CustomerAccountPill;
+import '../enquiries/enquiry_detail_page.dart' show CampaignCard;
 import '../properties/property_actions.dart';
 import '../properties/property_enums.dart';
 import 'site_visit_models.dart';
@@ -59,6 +60,11 @@ class _Detail extends StatelessWidget {
       _VisitCard(visit: visit),
       _CustomerCard(visit: visit),
       _PropertyCard(property: visit.property),
+      if (visit.attribution != null)
+        CampaignCard(
+          attribution: visit.attribution!,
+          reportedWhen: 'marking the visit completed',
+        ),
       _Timeline(visit: visit),
     ];
     final side = [_NoteCard(visit: visit), _AssignCard(visit: visit)];

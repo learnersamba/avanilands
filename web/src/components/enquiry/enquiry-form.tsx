@@ -5,6 +5,8 @@ import { useActionState, useRef, useState } from "react";
 
 import { submitEnquiry } from "@/app/enquiry-actions";
 import { usePrefill } from "@/components/account/use-prefill";
+import { AttributionInput } from "@/components/consent/attribution-input";
+import { useMetaEventOnce } from "@/components/consent/meta-events";
 import { Turnstile } from "@/components/enquiry/turnstile";
 import { contactMethods, type EnquiryFields, type EnquiryState } from "@/lib/enquiry";
 
@@ -69,6 +71,11 @@ function EnquiryFormRound({
   // Restarting the bot check (new widget) if it got stuck, e.g. after the
   // connection dropped: it never recovers on its own.
   const [checkAttempt, setCheckAttempt] = useState(0);
+  // Meta "Lead" (only with ad-cookie consent); same id as the server's event.
+  useMetaEventOnce(state.status === "sent" && !state.duplicate, "Lead", idempotencyKey, {
+    content_category: "land",
+    ...(propertyCode && { content_ids: [propertyCode], content_type: "product" }),
+  });
 
   if (state.status === "sent") {
     return (
@@ -132,6 +139,7 @@ function EnquiryFormRound({
       <input type="hidden" name="propertyId" value={propertyId ?? ""} />
       <input type="hidden" name="source" value={source} />
       <input ref={keyInput} type="hidden" name="idempotencyKey" defaultValue="" />
+      <AttributionInput />
 
       {error && (
         <p id={`${idPrefix}-form-error`} role="alert" className="rounded-lg bg-red-50 px-3 py-2 text-sm text-red-800">

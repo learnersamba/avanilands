@@ -1,6 +1,7 @@
 import { Mail, MapPin, Phone } from "lucide-react";
 import Link from "next/link";
 
+import { CookieChoicesButton } from "@/components/consent/cookie-choices-button";
 import { Logo } from "@/components/site-header";
 import { Container } from "@/components/ui";
 import { registrations, withoutFinalDot } from "@/components/company-details";
@@ -80,9 +81,12 @@ export async function SiteFooter() {
               <p>{registrations(settings).map(([label, value]) => `${label}: ${value}`).join(" · ")}</p>
             )}
           </div>
-          <nav aria-label="Legal" className="flex gap-5">
+          <nav aria-label="Legal" className="flex flex-wrap gap-x-5">
             <Link href="/terms" className="inline-block py-1.5 hover:text-sand">Terms</Link>
             <Link href="/privacy" className="inline-block py-1.5 hover:text-sand">Privacy</Link>
+            {settings.meta_ads_enabled && process.env.NEXT_PUBLIC_META_PIXEL_ID && (
+              <CookieChoicesButton className="inline-block py-1.5 hover:text-sand" />
+            )}
             <Link href="/disclaimer" className="inline-block py-1.5 hover:text-sand">Disclaimer</Link>
           </nav>
         </Container>

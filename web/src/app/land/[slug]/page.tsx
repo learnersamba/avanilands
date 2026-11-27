@@ -21,6 +21,7 @@ import Link from "next/link";
 import { notFound } from "next/navigation";
 import { Suspense, type ReactNode } from "react";
 
+import { MetaViewContent } from "@/components/consent/meta-events";
 import { JsonLd } from "@/components/json-ld";
 import { PhotoGallery } from "@/components/property/photo-gallery";
 import { PropertyMap } from "@/components/property/property-map";
@@ -205,6 +206,7 @@ async function PropertyContent({ params }: { params: Promise<{ slug: string }> }
               </span>
             </div>
             <RecordView propertyId={p.id} />
+            <MetaViewContent code={p.code} title={p.title} price={p.price_type === "total" ? p.price : null} />
             <h1 className="mt-3 font-serif text-3xl leading-tight text-ink sm:text-4xl">{p.title}</h1>
             <p className="mt-3 flex items-center gap-2 text-ink/75">
               <MapPin className="h-5 w-5 text-sand" aria-hidden /> {place}

@@ -12,17 +12,23 @@ const tileOrigin = (() => {
   }
 })();
 
+// Meta Pixel (decision 133): only allowed when a pixel id is set. The script
+// still runs only after the visitor agrees to advertising cookies.
+const meta = /^\d{5,20}$/.test(process.env.NEXT_PUBLIC_META_PIXEL_ID ?? "");
+const metaScript = meta ? " https://connect.facebook.net" : "";
+const metaSend = meta ? " https://www.facebook.com https://connect.facebook.net" : "";
+
 /**
  * Content-Security-Policy (docs/01-architecture.md §6). Next.js needs
  * inline scripts for its static pages; dev mode also needs eval for fast refresh.
  */
 const csp = [
   "default-src 'self'",
-  `script-src 'self' 'unsafe-inline' https://challenges.cloudflare.com${isDev ? " 'unsafe-eval'" : ""}`,
+  `script-src 'self' 'unsafe-inline' https://challenges.cloudflare.com${metaScript}${isDev ? " 'unsafe-eval'" : ""}`,
   "style-src 'self' 'unsafe-inline'",
-  `img-src 'self' data: blob: ${supabase} https://img.youtube.com https://i.ytimg.com ${tileOrigin}`,
+  `img-src 'self' data: blob: ${supabase} https://img.youtube.com https://i.ytimg.com ${tileOrigin}${meta ? " https://www.facebook.com" : ""}`,
   "font-src 'self'",
-  `connect-src 'self' ${supabase}${isDev ? " ws:" : ""}`,
+  `connect-src 'self' ${supabase}${metaSend}${isDev ? " ws:" : ""}`,
   `media-src 'self' ${supabase}`,
   "frame-src https://www.youtube-nocookie.com https://www.youtube.com https://challenges.cloudflare.com",
   "object-src 'none'",

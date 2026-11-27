@@ -108,6 +108,8 @@ export type SiteSettings = {
   visit_slots: string[];
   visit_closed_dates: string[];
   visit_days_ahead: number;
+  /** Settings → Advertising: Meta Pixel and Conversions API on (decision 133). */
+  meta_ads_enabled: boolean;
 };
 
 export type LocationSummary = {
@@ -144,6 +146,7 @@ const fallbackSettings: SiteSettings = {
   visit_slots: ["10:00", "12:00", "15:00"],
   visit_closed_dates: [],
   visit_days_ahead: 30,
+  meta_ads_enabled: false,
 };
 
 function fail(what: string, message: string): never {

@@ -101,6 +101,33 @@ void main() {
     expect(note.headline, 'Added a note');
   });
 
+  group('campaign (decision 133)', () {
+    test('no attribution row means no campaign card', () {
+      expect(_enquiry().attribution, isNull);
+    });
+
+    test('reads the embedded row, as an object or a one-item list', () {
+      const row = {
+        'utm_source': 'facebook',
+        'utm_medium': 'paid_social',
+        'utm_campaign': 'vizag-plots-nov',
+        'landing_path': '/land/plot',
+        'ad_consent': true,
+      };
+      for (final value in [row, [row]]) {
+        final attribution = LeadAttribution.parse(value)!;
+        expect(attribution.summary, 'facebook / paid_social · vizag-plots-nov');
+        expect(attribution.adConsent, isTrue);
+        expect(attribution.hasCampaign, isTrue);
+      }
+      expect(LeadAttribution.parse(const []), isNull);
+      expect(
+        LeadAttribution.parse(const {'ad_consent': false})!.hasCampaign,
+        isFalse,
+      );
+    });
+  });
+
   group('CSV', () {
     test('quotes commas, quotes and new lines', () {
       expect(

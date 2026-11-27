@@ -5,6 +5,7 @@ import { sendEmail } from "@/lib/email";
 import { customerEnquiryEmail, type EnquiryEmailData, salesEnquiryEmail } from "@/lib/email-templates";
 import { type EnquiryFields, type EnquiryState, enquirySchema, explainSubmitError } from "@/lib/enquiry";
 import { env } from "@/lib/env";
+import { recordLead } from "@/lib/lead-tracking";
 import { createAdminClient } from "@/lib/supabase/admin";
 import { currentCustomer } from "@/lib/supabase/server";
 import { verifyTurnstile } from "@/lib/turnstile";
@@ -92,10 +93,22 @@ export async function submitEnquiry(_previous: EnquiryState, form: FormData): Pr
 
   const result = data as { id: string; reference: string; duplicate: boolean };
   if (!result.duplicate) {
-    // Notify sales and the customer (the enquiry is saved either way).
-    await sendEnquiryEmails(result.reference, input).catch((error) =>
-      console.error("Enquiry emails failed", error),
-    );
+    // Notify sales and the customer (the enquiry is saved either way), and
+    // note the campaign / tell Meta (decision 133; never fails the enquiry).
+    await Promise.all([
+      sendEnquiryEmails(result.reference, input).catch((error) => console.error("Enquiry emails failed", error)),
+      recordLead({
+        kind: "enquiry",
+        id: result.id,
+        eventId: input.idempotencyKey,
+        eventName: "Lead",
+        attribution: form.get("attribution"),
+        phone: input.phone,
+        email: input.email,
+        propertyId: input.propertyId,
+        ip,
+      }),
+    ]);
   }
   return { status: "sent", reference: result.reference, duplicate: result.duplicate };
 }

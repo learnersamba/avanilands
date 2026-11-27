@@ -26,6 +26,7 @@ class SiteSettings {
     this.salesNotifyEmails = const [],
     this.seoTitle,
     this.seoDescription,
+    this.metaAdsEnabled = false,
     this.updatedAt,
   });
 
@@ -49,6 +50,7 @@ class SiteSettings {
         .cast<String>(),
     seoTitle: json['seo_title'] as String?,
     seoDescription: json['seo_description'] as String?,
+    metaAdsEnabled: json['meta_ads_enabled'] as bool? ?? false,
     updatedAt: json['updated_at'] == null
         ? null
         : DateTime.parse(json['updated_at'] as String),
@@ -70,6 +72,9 @@ class SiteSettings {
   final List<String> salesNotifyEmails;
   final String? seoTitle;
   final String? seoDescription;
+
+  /// Meta (Facebook / Instagram) ads measurement on the website (decision 133).
+  final bool metaAdsEnabled;
   final DateTime? updatedAt;
 
   Map<String, dynamic> toJson() => {
@@ -89,6 +94,7 @@ class SiteSettings {
     'sales_notify_emails': salesNotifyEmails,
     'seo_title': seoTitle,
     'seo_description': seoDescription,
+    'meta_ads_enabled': metaAdsEnabled,
   };
 }
 

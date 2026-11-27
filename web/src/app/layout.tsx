@@ -4,6 +4,7 @@ import { Fraunces, Inter } from "next/font/google";
 
 import { AccountProvider } from "@/components/account/account-provider";
 import { CompareTray } from "@/components/compare/compare-tray";
+import { Marketing } from "@/components/consent/marketing";
 import { JsonLd } from "@/components/json-ld";
 import { PageTracker } from "@/components/page-tracker";
 import { SiteFooter } from "@/components/site-footer";
@@ -59,6 +60,8 @@ export default async function RootLayout({ children }: LayoutProps<"/">) {
           <Suspense fallback={null}>
             <CompareTray />
             <PageTracker />
+            {/* Campaign tags always; Meta Pixel only with consent (decision 133). */}
+            <Marketing pixelId={process.env.NEXT_PUBLIC_META_PIXEL_ID ?? ""} enabled={settings.meta_ads_enabled} />
           </Suspense>
         </AccountProvider>
       </body>

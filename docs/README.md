@@ -15,6 +15,7 @@ A premium, company-owned land-selling platform: a **Next.js** customer website a
 **For launch and running the business:**
 
 - [DEPLOY.md](DEPLOY.md) — setting up staging and production, final checks
+- [META-ADS.md](META-ADS.md) — Meta (Facebook & Instagram) ads: consent, Pixel, Conversions API, setup and testing
 - [RECOVERY.md](RECOVERY.md) — backups, restoring, leaked keys, contacts
 - [STAFF-GUIDE.md](STAFF-GUIDE.md) — how the sales team uses the admin panel
 - [TEST-CHECKLIST.md](TEST-CHECKLIST.md) — the owner's test lists and what is covered
