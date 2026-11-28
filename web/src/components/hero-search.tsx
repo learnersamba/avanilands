@@ -62,9 +62,9 @@ export function HeroSearch({ locations, types }: { locations: LocationSummary[];
       </label>
       <button
         type="submit"
-        className="inline-flex items-center justify-center gap-2 rounded-md bg-forest-dark px-7 py-3.5 text-base font-medium text-white hover:bg-forest sm:col-span-2 lg:col-span-1 lg:!border-l-0"
+        className="inline-flex items-center justify-center gap-2 rounded-md bg-sand px-7 py-3.5 font-heading text-base font-semibold text-forest-dark transition-colors hover:bg-[#C29F2E] sm:col-span-2 lg:col-span-1 lg:!border-l-0"
       >
-        <Search className="h-4 w-4" aria-hidden /> Search land
+        Search <Search className="h-4 w-4" aria-hidden />
       </button>
     </form>
   );

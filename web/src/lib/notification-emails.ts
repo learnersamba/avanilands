@@ -41,7 +41,7 @@ export function savedLandEmail(d: SavedLandEmailData): Email {
     d.title,
     `<p>${escapeHtml(greeting)}</p>
 ${d.body ? `<p>${escapeHtml(d.body)}</p>` : ""}
-${url ? `<p><a href="${escapeHtml(url)}" style="color:#1a4535;font-weight:bold">See the property</a></p>` : ""}
+${url ? `<p><a href="${escapeHtml(url)}" style="color:#0B3B2E;font-weight:bold">See the property</a></p>` : ""}
 ${callUs ? `<p>${escapeHtml(callUs)}</p>` : ""}
 <p>— ${escapeHtml(d.companyName)}</p>
 <p style="color:#5b6770;font-size:12px">You get this because you saved this land on our website.

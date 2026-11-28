@@ -20,7 +20,7 @@ export function AccountLink() {
   return (
     <Link
       href={user ? "/account" : "/account/sign-in"}
-      className="inline-flex h-10 items-center gap-2 rounded-lg px-2 text-sm font-semibold text-forest hover:bg-forest/5"
+      className="inline-flex h-10 items-center gap-2 rounded-lg px-2 text-sm font-semibold text-white hover:bg-white/10"
       aria-label={ariaLabel}
     >
       <span className="relative">

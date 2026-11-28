@@ -1,11 +1,10 @@
-import { ArrowRight, Check, Star } from "lucide-react";
+import { ArrowRight, Building2, Check, House, LandPlot, Sprout, Star, TrendingUp } from "lucide-react";
 import Link from "next/link";
 
 import { ContactBand } from "@/components/contact-band";
 import { FaqList } from "@/components/faq-list";
 import { HeroSearch } from "@/components/hero-search";
 import { contentIcons } from "@/components/icons";
-import { LayoutPlan } from "@/components/layout-plan";
 import { LocationCard } from "@/components/location-card";
 import { PropertyGrid } from "@/components/property-card";
 import { ButtonLink, Container, SectionHeading } from "@/components/ui";
@@ -16,6 +15,15 @@ import type {
   PropertyType,
 } from "@/lib/data";
 import { storageUrl } from "@/lib/media";
+
+/** An icon for each property type, matched on its slug. */
+function typeIcon(slug: string) {
+  if (/farm|agri/.test(slug)) return Sprout;
+  if (/resid|villa|house/.test(slug)) return House;
+  if (/commer|office|shop/.test(slug)) return Building2;
+  if (/invest/.test(slug)) return TrendingUp;
+  return LandPlot;
+}
 
 export type HomeData = {
   content: SiteContent;
@@ -55,41 +63,64 @@ export function HomeView({
 
   return (
     <>
-      {/* Hero: headline and search beside a layout plan that draws itself. */}
-      <section className="relative overflow-hidden bg-forest-dark text-white">
-        {hero.image_path && (
+      {/* Hero: a full-width photo (Admin → Content → Hero image), headline and search. */}
+      <section className="relative isolate overflow-hidden bg-forest-dark text-white">
+        {hero.image_path ? (
           // eslint-disable-next-line @next/next/no-img-element
           <img
             src={storageUrl("site-assets", hero.image_path)}
             alt=""
             fetchPriority="high"
-            className="absolute inset-0 h-full w-full object-cover opacity-20"
+            className="absolute inset-0 -z-10 h-full w-full object-cover"
           />
+        ) : (
+          <div className="bg-contours absolute inset-0 -z-10" aria-hidden />
         )}
+        {/* Darkens the left side so the headline stays readable on any photo. */}
         <div
-          className="absolute inset-0 bg-[radial-gradient(ellipse_at_75%_40%,rgba(44,101,80,0.55),transparent_60%)]"
+          className="absolute inset-0 -z-10 bg-[linear-gradient(90deg,rgba(11,59,46,0.92)_0%,rgba(11,59,46,0.72)_45%,rgba(11,59,46,0.15)_100%)]"
           aria-hidden
         />
-        <Container className="relative grid items-center gap-x-12 gap-y-10 pb-14 pt-14 sm:pt-20 lg:grid-cols-[1.05fr_1fr] lg:pb-20">
-          <div>
-            <h1 className="max-w-xl font-serif text-[2.6rem] leading-[1.04] sm:text-6xl lg:text-[4.25rem]">
-              {hero.title}
-            </h1>
-            <p className="mt-6 max-w-lg text-lg leading-relaxed text-white/75">
-              {hero.subtitle}
-            </p>
-          </div>
-          <div className="mx-auto w-full max-w-[34rem] lg:max-w-none">
-            <LayoutPlan caption={hero.eyebrow} />
-          </div>
-          <div className="lg:col-span-2">
+        <Container className="pb-28 pt-16 sm:pb-32 sm:pt-24 lg:pb-36 lg:pt-28">
+          {hero.eyebrow && (
+            <p className="font-heading text-xs font-semibold uppercase tracking-[0.18em] text-sand">{hero.eyebrow}</p>
+          )}
+          <h1 className="mt-4 max-w-2xl font-serif text-[2.6rem] leading-[1.06] sm:text-6xl lg:text-[4.1rem]">
+            {hero.title}
+          </h1>
+          <p className="mt-5 max-w-lg text-lg leading-relaxed text-white/85">{hero.subtitle}</p>
+          <div className="mt-9 max-w-4xl">
             <HeroSearch locations={locations} types={types} />
           </div>
         </Container>
       </section>
 
+      {/* Property types, overlapping the hero like the mockup. */}
+      {types.length > 0 && (
+        <section aria-label="Browse by type" className="relative z-10 -mt-16">
+          <Container>
+            <ul className="grid grid-cols-2 overflow-hidden rounded-xl border border-line bg-white shadow-[0_20px_40px_-28px_rgba(11,59,46,0.5)] sm:grid-cols-4 sm:divide-x sm:divide-line">
+              {types.slice(0, 4).map((type) => {
+                const Icon = typeIcon(type.slug);
+                return (
+                  <li key={type.id}>
+                    <Link
+                      href={`/land?type=${type.seo_slug}`}
+                      className="group flex flex-col items-center gap-2 px-4 py-6 text-center transition-colors hover:bg-paper"
+                    >
+                      <Icon className="h-8 w-8 text-forest-light transition-colors group-hover:text-forest-dark" strokeWidth={1.5} aria-hidden />
+                      <span className="font-heading text-sm font-semibold text-forest-dark">{type.name}</span>
+                    </Link>
+                  </li>
+                );
+              })}
+            </ul>
+          </Container>
+        </section>
+      )}
+
       {/* Trust strip */}
-      <section aria-label="Why buyers trust us" className="border-b border-line bg-white">
+      <section aria-label="Why buyers trust us" className="mt-10 border-y border-line bg-white">
         <Container className="grid grid-cols-2 gap-y-6 py-8 lg:grid-cols-4 lg:divide-x lg:divide-line">
           {trustPoints.map((point) => {
             const Icon = contentIcons[point.icon] ?? contentIcons.badge;
@@ -153,17 +184,18 @@ export function HomeView({
 
       {/* Featured */}
       {featured.length > 0 && (
-        <section className="py-24" aria-labelledby="featured-title">
+        <section className="py-20" aria-labelledby="featured-title">
           <Container>
             <div className="flex flex-wrap items-end justify-between gap-6">
               <div id="featured-title">
-                <SectionHeading
-                  title="Handpicked land, ready to visit"
-                />
+                <SectionHeading title="Featured Properties" />
               </div>
-              <ButtonLink href="/land" variant="outline">
-                See all land <ArrowRight className="h-4 w-4" aria-hidden />
-              </ButtonLink>
+              <Link
+                href="/land"
+                className="inline-flex items-center gap-1.5 font-heading text-sm font-semibold text-forest-dark transition-[gap] hover:gap-2.5"
+              >
+                View All <ArrowRight className="h-4 w-4" aria-hidden />
+              </Link>
             </div>
             <div className="mt-10">
               <PropertyGrid properties={featured} />

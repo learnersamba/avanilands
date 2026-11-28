@@ -36,14 +36,14 @@ export function SectionHeading({
 
 const buttonStyles = {
   primary: "bg-forest-dark text-white hover:bg-forest",
-  gold: "bg-sand text-forest-dark hover:bg-[#c9a46c]",
+  gold: "bg-sand text-forest-dark hover:bg-[#C29F2E]",
   outline: "border border-forest-dark/25 text-forest-dark hover:border-forest-dark",
   light: "border border-white/35 text-white hover:border-white hover:bg-white/5",
 } as const;
 
 /** Classes for a button-looking link (for client components that render their own <a>). */
 export function buttonClasses(variant: keyof typeof buttonStyles = "primary", className = "") {
-  return `inline-flex items-center justify-center gap-2 rounded-md px-5 py-3 text-[0.95rem] font-medium transition-colors ${buttonStyles[variant]} ${className}`;
+  return `inline-flex items-center justify-center gap-2 rounded-md px-5 py-3 font-heading text-[0.9rem] font-semibold transition-colors ${buttonStyles[variant]} ${className}`;
 }
 
 export function ButtonLink({
@@ -54,7 +54,7 @@ export function ButtonLink({
   return (
     <Link
       {...props}
-      className={`inline-flex items-center justify-center gap-2 rounded-md px-5 py-3 text-[0.95rem] font-medium transition-colors ${buttonStyles[variant]} ${className}`}
+      className={`inline-flex items-center justify-center gap-2 rounded-md px-5 py-3 font-heading text-[0.9rem] font-semibold transition-colors ${buttonStyles[variant]} ${className}`}
     />
   );
 }
@@ -68,7 +68,7 @@ export function ButtonAnchor({
   return (
     <a
       {...props}
-      className={`inline-flex items-center justify-center gap-2 rounded-md px-5 py-3 text-[0.95rem] font-medium transition-colors ${buttonStyles[variant]} ${className}`}
+      className={`inline-flex items-center justify-center gap-2 rounded-md px-5 py-3 font-heading text-[0.9rem] font-semibold transition-colors ${buttonStyles[variant]} ${className}`}
     />
   );
 }

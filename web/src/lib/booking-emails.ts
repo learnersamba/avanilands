@@ -67,7 +67,7 @@ ${d.email ? row("Email", `<a href="mailto:${escapeHtml(d.email)}">${escapeHtml(d
 ${d.message ? row("Message", escapeHtml(d.message).replace(/\n/g, "<br>")) : ""}
 </table>
 <p>Call the customer, then send it for approval in the admin panel.</p>
-${d.adminUrl ? `<p><a href="${escapeHtml(d.adminUrl)}/bookings" style="color:#1a4535;font-weight:bold">Open bookings</a></p>` : ""}`,
+${d.adminUrl ? `<p><a href="${escapeHtml(d.adminUrl)}/bookings" style="color:#0B3B2E;font-weight:bold">Open bookings</a></p>` : ""}`,
   );
   return { subject, text, html };
 }
@@ -157,7 +157,7 @@ export function customerBookingEmail(
     step.title,
     `<p>Dear ${escapeHtml(d.name)},</p>
 ${lines.map((line) => `<p>${escapeHtml(line)}</p>`).join("\n")}
-<p><a href="${escapeHtml(d.property.url)}" style="color:#1a4535">View the property</a></p>
+<p><a href="${escapeHtml(d.property.url)}" style="color:#0B3B2E">View the property</a></p>
 <p style="padding:12px;background:#fff7e6;border-radius:8px;font-size:13px">${escapeHtml(safety)}</p>
 <p>${escapeHtml(callUs)}</p>
 <p>— ${escapeHtml(d.companyName)}</p>`,

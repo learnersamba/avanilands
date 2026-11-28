@@ -67,7 +67,7 @@ export async function ListingView({ filters }: { filters: ListingFilters }) {
 function EmptyResults({ filters, pageTooFar }: { filters: ListingFilters; pageTooFar: boolean }) {
   return (
     <div className="rounded-xl border border-dashed border-line bg-white px-6 py-16 text-center">
-      <SearchX className="mx-auto h-10 w-10 text-sand" aria-hidden />
+      <SearchX className="mx-auto h-10 w-10 text-sand-dark" aria-hidden />
       <h3 className="mt-4 font-serif text-2xl text-forest">
         {pageTooFar ? "There are no more results" : "No land matches these filters"}
       </h3>

@@ -1,6 +1,6 @@
 import type { Metadata, Viewport } from "next";
 import { Suspense } from "react";
-import { Anek_Latin, Noto_Serif_Display } from "next/font/google";
+import { Inter, Montserrat, Playfair_Display } from "next/font/google";
 
 import { AccountProvider } from "@/components/account/account-provider";
 import { CompareTray } from "@/components/compare/compare-tray";
@@ -16,14 +16,20 @@ import { organizationJsonLd } from "@/lib/structured-data";
 
 import "./globals.css";
 
-// Body: Anek Latin (Ek Type, an Indian foundry; it has a Telugu sibling for later).
-// Headings and prices: Noto Serif Display, light and regular only.
+// Brand kit fonts: Inter for body text, Montserrat for the wordmark, buttons, prices
+// and card titles, Playfair Display for page and section headings.
 // "latin-ext" carries the rupee sign (₹); browsers fetch it only when it is used.
-const body = Anek_Latin({ variable: "--font-body", subsets: ["latin", "latin-ext"], display: "swap" });
-const display = Noto_Serif_Display({
+const body = Inter({ variable: "--font-body", subsets: ["latin", "latin-ext"], display: "swap" });
+const head = Montserrat({
+  variable: "--font-head",
+  subsets: ["latin", "latin-ext"],
+  weight: ["500", "600", "700"],
+  display: "swap",
+});
+const display = Playfair_Display({
   variable: "--font-display",
   subsets: ["latin", "latin-ext"],
-  weight: ["300", "400"],
+  weight: ["600", "700"],
   display: "swap",
 });
 
@@ -42,12 +48,12 @@ export async function generateMetadata(): Promise<Metadata> {
   };
 }
 
-export const viewport: Viewport = { themeColor: "#0f2c22" };
+export const viewport: Viewport = { themeColor: "#0B3B2E" };
 
 export default async function RootLayout({ children }: LayoutProps<"/">) {
   const settings = await getSiteSettings();
   return (
-    <html lang="en-IN" className={`${body.variable} ${display.variable} h-full antialiased`}>
+    <html lang="en-IN" className={`${body.variable} ${head.variable} ${display.variable} h-full antialiased`}>
       <body className="flex min-h-full flex-col">
         <a
           href="#main"

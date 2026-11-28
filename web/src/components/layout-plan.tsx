@@ -94,7 +94,7 @@ export function LayoutPlan({ caption }: { caption: string }) {
           pathLength={1}
           d={boundary}
           fill="none"
-          stroke="#b8925a"
+          stroke="#D4AF37"
           strokeWidth="1.8"
           strokeLinejoin="round"
         />
@@ -131,7 +131,7 @@ export function LayoutPlan({ caption }: { caption: string }) {
           {/* Callout. */}
           <path d={`M${picked.x + picked.w} ${picked.y + 6} L312 128`} stroke="#d9b98a" strokeWidth="1" fill="none" />
           <g transform="translate(304 68)">
-            <rect width="168" height="60" rx="4" fill="#0f2c22" stroke="#b8925a" strokeWidth="1" />
+            <rect width="168" height="60" rx="4" fill="#0B3B2E" stroke="#D4AF37" strokeWidth="1" />
             <text x="14" y="25" fontSize="15" fill="#fff" fontFamily="var(--font-display)">
               Plot {picked.n}, available
             </text>

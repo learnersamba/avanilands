@@ -209,17 +209,31 @@ async function PropertyContent({ params }: { params: Promise<{ slug: string }> }
             <MetaViewContent code={p.code} title={p.title} price={p.price_type === "total" ? p.price : null} />
             <h1 className="mt-3 font-serif text-3xl leading-tight text-ink sm:text-4xl">{p.title}</h1>
             <p className="mt-3 flex items-center gap-2 text-ink/75">
-              <MapPin className="h-5 w-5 text-sand" aria-hidden /> {place}
+              <MapPin className="h-5 w-5 text-sand-dark" aria-hidden /> {place}
             </p>
+            {p.approval_type !== "not_applicable" && (
+              <p className="mt-4 flex flex-wrap gap-2">
+                <span className="inline-flex items-center gap-1.5 rounded-full bg-forest-dark px-3 py-1 text-xs font-semibold text-white">
+                  <BadgeCheck className="h-3.5 w-3.5 text-sand" aria-hidden />
+                  {approvalLabels[p.approval_type] ?? p.approval_type}
+                  {p.approval_number && <span className="font-normal text-white/70">· {p.approval_number}</span>}
+                </span>
+                {p.rera_number && (
+                  <span className="inline-flex items-center rounded-full bg-sand-light px-3 py-1 text-xs font-semibold text-forest-dark">
+                    RERA {p.rera_number}
+                  </span>
+                )}
+              </p>
+            )}
             <div className="mt-6 flex flex-wrap items-end gap-x-6 gap-y-2">
-              <p className="font-serif text-4xl text-forest">
+              <p className="font-heading text-4xl font-bold text-forest-dark tabular-nums">
                 {p.price_type === "on_request" || p.price == null ? "Price on request" : formatRupees(p.price)}
               </p>
               {p.price != null && p.price_type === "total" && (
                 <p className="pb-1 text-muted">({formatRupeesShort(p.price)})</p>
               )}
               {p.price_per_unit != null && p.price_per_unit_unit && (
-                <p className="pb-1 text-muted">
+                <p className="pb-1 font-semibold text-forest-light">
                   {formatRupees(p.price_per_unit)} / {unitLabel(p.price_per_unit_unit)}
                 </p>
               )}
@@ -262,7 +276,7 @@ async function PropertyContent({ params }: { params: Promise<{ slug: string }> }
               <ul className="grid gap-3 sm:grid-cols-2">
                 {p.highlights.map((highlight) => (
                   <li key={highlight} className="flex items-start gap-3 rounded-xl bg-white p-4 ring-1 ring-line">
-                    <BadgeCheck className="mt-0.5 h-5 w-5 shrink-0 text-sand" aria-hidden />
+                    <BadgeCheck className="mt-0.5 h-5 w-5 shrink-0 text-forest-light" aria-hidden />
                     {highlight}
                   </li>
                 ))}
@@ -363,7 +377,7 @@ async function PropertyContent({ params }: { params: Promise<{ slug: string }> }
                         rel="nofollow"
                         className="inline-flex items-center gap-3 py-1 text-sm font-medium text-forest hover:underline"
                       >
-                        <FileText className="h-5 w-5 text-sand" aria-hidden />
+                        <FileText className="h-5 w-5 text-sand-dark" aria-hidden />
                         {document.title}
                         <span className="font-normal text-muted">
                           ({document.mime_type === "application/pdf" ? "PDF" : "Image"}, {formatBytes(document.size_bytes)})
@@ -387,10 +401,10 @@ async function PropertyContent({ params }: { params: Promise<{ slug: string }> }
                 ? "border-t-4 border-sold"
                 : p.availability === "reserved"
                   ? "border-t-4 border-reserved"
-                  : ""
+                  : "border-t-4 border-sand"
             }`}
           >
-            <h2 className="font-serif text-2xl text-forest">Interested?</h2>
+            <h2 className="font-serif text-2xl text-forest-dark">Interested in this property?</h2>
             {p.availability === "sold" ? (
               <p className="mt-2 text-sm text-ink/80">
                 This property has been sold. Call or WhatsApp us and we&apos;ll suggest similar land.

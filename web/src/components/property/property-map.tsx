@@ -8,7 +8,7 @@ const attribution =
   process.env.NEXT_PUBLIC_MAP_ATTRIBUTION ||
   '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors';
 
-const pin = `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 42" width="32" height="42"><path d="M16 0C7.2 0 0 7.1 0 15.9 0 27.8 16 42 16 42s16-14.2 16-26.1C32 7.1 24.8 0 16 0Z" fill="#1a4535"/><circle cx="16" cy="16" r="6" fill="#b8925a"/></svg>`;
+const pin = `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 42" width="32" height="42"><path d="M16 0C7.2 0 0 7.1 0 15.9 0 27.8 16 42 16 42s16-14.2 16-26.1C32 7.1 24.8 0 16 0Z" fill="#0B3B2E"/><circle cx="16" cy="16" r="6" fill="#D4AF37"/></svg>`;
 
 /**
  * Leaflet map, loaded only when scrolled into view.
@@ -54,7 +54,7 @@ export function PropertyMap({ lat, lng, exact, label }: { lat: number; lng: numb
           icon: L.divIcon({ html: pin, className: "", iconSize: [32, 42], iconAnchor: [16, 42] }),
         }).addTo(map);
       } else {
-        L.circle([lat, lng], { radius: 900, color: "#1a4535", weight: 2, fillColor: "#b8925a", fillOpacity: 0.25 }).addTo(map);
+        L.circle([lat, lng], { radius: 900, color: "#0B3B2E", weight: 2, fillColor: "#D4AF37", fillOpacity: 0.25 }).addTo(map);
       }
     });
     return () => {

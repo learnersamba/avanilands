@@ -53,7 +53,7 @@ ${d.email ? row("Email", `<a href="mailto:${escapeHtml(d.email)}">${escapeHtml(d
 ${d.message ? row("Message", escapeHtml(d.message).replace(/\n/g, "<br>")) : ""}
 </table>
 <p>Call the customer to confirm, then confirm it in the admin panel (they get an email).</p>
-${d.adminUrl ? `<p><a href="${escapeHtml(d.adminUrl)}/site-visits" style="color:#1a4535;font-weight:bold">Open site visits</a></p>` : ""}`,
+${d.adminUrl ? `<p><a href="${escapeHtml(d.adminUrl)}/site-visits" style="color:#0B3B2E;font-weight:bold">Open site visits</a></p>` : ""}`,
   );
   return { subject, text, html };
 }
@@ -126,8 +126,8 @@ ${row("Property", `<a href="${escapeHtml(d.property.url)}">${escapeHtml(`${d.pro
 ${row(active ? "When" : "Was", `<strong>${escapeHtml(when(d))}</strong>`)}
 ${row("Reference", escapeHtml(d.reference))}
 </table>
-${active && d.property.mapsUrl ? `<p><a href="${escapeHtml(d.property.mapsUrl)}" style="color:#1a4535;font-weight:bold">Get directions</a></p>` : ""}
-${calendar ? `<p><a href="${escapeHtml(calendar)}" style="color:#1a4535">Add to Google Calendar</a></p>` : ""}
+${active && d.property.mapsUrl ? `<p><a href="${escapeHtml(d.property.mapsUrl)}" style="color:#0B3B2E;font-weight:bold">Get directions</a></p>` : ""}
+${calendar ? `<p><a href="${escapeHtml(calendar)}" style="color:#0B3B2E">Add to Google Calendar</a></p>` : ""}
 <p>${escapeHtml(callUs)}</p>
 <p>— ${escapeHtml(d.companyName)}</p>`,
   );

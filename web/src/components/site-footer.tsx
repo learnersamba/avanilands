@@ -14,16 +14,15 @@ export async function SiteFooter() {
     <footer className="bg-contours bg-forest-dark text-white/80">
       <Container className="grid gap-10 py-14 sm:grid-cols-2 lg:grid-cols-4">
         <div className="space-y-4">
-          <Logo light name={settings.company_name} descriptor={settings.descriptor} />
-          <p className="font-serif text-base text-sand">{settings.tagline}</p>
-          <p className="text-sm leading-relaxed">
+          <Logo name={settings.company_name} descriptor={settings.tagline} />
+                    <p className="text-sm leading-relaxed">
             Verified land sold directly by {settings.company_name}. We own every property we list — no brokers, no
             third-party sellers.
           </p>
         </div>
 
         <div>
-          <h2 className="font-serif text-lg text-white">Explore</h2>
+          <h2 className="font-heading text-base font-semibold text-white">Explore</h2>
           <ul className="mt-3 space-y-0.5 text-sm">
             <li><Link href="/land" className="inline-block py-1.5 hover:text-sand">All land for sale</Link></li>
             <li><Link href="/locations" className="inline-block py-1.5 hover:text-sand">Locations</Link></li>
@@ -34,7 +33,7 @@ export async function SiteFooter() {
         </div>
 
         <div>
-          <h2 className="font-serif text-lg text-white">Locations</h2>
+          <h2 className="font-heading text-base font-semibold text-white">Locations</h2>
           <ul className="mt-3 space-y-0.5 text-sm">
             {locations.slice(0, 6).map((location) => (
               <li key={location.id}>
@@ -47,7 +46,7 @@ export async function SiteFooter() {
         </div>
 
         <div>
-          <h2 className="font-serif text-lg text-white">Contact</h2>
+          <h2 className="font-heading text-base font-semibold text-white">Contact</h2>
           <ul className="mt-4 space-y-3 text-sm">
             {settings.phone && (
               <li className="flex items-start gap-2">
