@@ -111,7 +111,7 @@ export function BookingRequest({ property }: { property: Property }) {
         Request to book
       </h1>
 
-      <div className="mt-6 flex gap-4 rounded-2xl bg-white p-4 shadow-sm ring-1 ring-line">
+      <div className="mt-6 flex gap-4 rounded-xl bg-white p-4 shadow-sm ring-1 ring-line">
         {property.thumb ? (
           // eslint-disable-next-line @next/next/no-img-element
           <img
@@ -123,7 +123,7 @@ export function BookingRequest({ property }: { property: Property }) {
           />
         ) : null}
         <div>
-          <p className="text-xs font-medium uppercase tracking-wide text-muted">
+          <p className="text-sm text-muted">
             {property.code}
           </p>
           <p className="font-serif text-xl text-ink">{property.title}</p>
@@ -135,7 +135,7 @@ export function BookingRequest({ property }: { property: Property }) {
       </div>
 
       <div className="mt-8 grid gap-8 md:grid-cols-[1fr_280px]">
-        <div className="rounded-2xl bg-white p-6 shadow-sm ring-1 ring-line">
+        <div className="rounded-xl bg-white p-6 shadow-sm ring-1 ring-line">
           {!ready ? (
             <p className="text-sm text-muted">Loading…</p>
           ) : !user ? (

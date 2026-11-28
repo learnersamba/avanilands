@@ -129,7 +129,7 @@ async function Comparison({
       </div>
 
       <DifferencesToggle>
-        <div className="overflow-x-auto rounded-2xl bg-white shadow-sm ring-1 ring-line">
+        <div className="overflow-x-auto rounded-xl bg-white shadow-sm ring-1 ring-line">
           <table
             className="w-full table-fixed border-collapse text-sm"
             // Phones scroll sideways: a narrow label column + ~180 px per property.
@@ -142,7 +142,7 @@ async function Comparison({
               <tr>
                 <th
                   scope="col"
-                  className="sticky left-0 z-10 w-24 bg-white sm:w-36 p-4 text-left align-bottom text-xs uppercase tracking-wide text-muted"
+                  className="sticky left-0 z-10 w-24 bg-white sm:w-36 p-4 text-left align-bottom text-sm text-muted"
                 >
                   <span className="sr-only">Detail</span>
                 </th>
@@ -174,8 +174,8 @@ async function Comparison({
                           <StatusBadge status={p.availability} />
                         </span>
                       </div>
-                      <p className="mt-3 text-xs font-medium uppercase tracking-wide text-muted">
-                        {p.type_name} · {p.code}
+                      <p className="mt-3 text-sm text-muted">
+                        {p.type_name}, {p.code}
                       </p>
                       <p className="mt-1 font-serif text-lg leading-snug text-ink group-hover:text-forest">
                         {p.title}

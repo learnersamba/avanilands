@@ -25,7 +25,7 @@ export default async function LocationsPage() {
           <section
             key={location.id}
             id={location.slug}
-            className="grid scroll-mt-24 items-center gap-6 rounded-2xl bg-white p-4 ring-1 ring-line sm:grid-cols-[320px_1fr] sm:p-5"
+            className="grid scroll-mt-24 items-center gap-6 rounded-xl bg-white p-4 ring-1 ring-line sm:grid-cols-[320px_1fr] sm:p-5"
           >
             <LocationCard location={location} href={`/land-for-sale/${location.slug}`} />
             <div className="px-1 pb-2">

@@ -22,7 +22,7 @@ export default function SignInPage() {
         Save properties and see all your enquiries and site visits in one place.
         No password needed — we email you a code.
       </p>
-      <div className="mt-8 rounded-2xl bg-white p-6 shadow-sm ring-1 ring-line">
+      <div className="mt-8 rounded-xl bg-white p-6 shadow-sm ring-1 ring-line">
         <Suspense fallback={<p className="text-sm text-muted">Loading…</p>}>
           <SignInForm />
         </Suspense>

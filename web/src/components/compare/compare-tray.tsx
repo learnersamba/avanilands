@@ -27,7 +27,7 @@ export function CompareTray() {
       {open && (
         <div
           id="compare-tray"
-          className="mb-2 rounded-2xl bg-white p-4 shadow-xl ring-1 ring-line"
+          className="mb-2 rounded-xl bg-white p-4 shadow-xl ring-1 ring-line"
         >
           <p className="text-sm font-semibold text-ink">
             Compare list ({picks.length} of {maxCompare})

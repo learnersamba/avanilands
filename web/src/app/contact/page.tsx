@@ -63,7 +63,7 @@ export default async function ContactPage() {
           </ContactRow>
         </div>
 
-        <div className="rounded-2xl bg-white p-6 shadow-sm ring-1 ring-line sm:p-8">
+        <div className="rounded-xl bg-white p-6 shadow-sm ring-1 ring-line sm:p-8">
           <h2 className="font-serif text-2xl text-forest">Send an enquiry</h2>
           <div className="mt-6">
             <EnquiryForm
@@ -80,7 +80,7 @@ export default async function ContactPage() {
 
 function ContactRow({ icon, title, children }: { icon: ReactNode; title: string; children: ReactNode }) {
   return (
-    <div className="flex gap-4 rounded-2xl bg-white p-5 ring-1 ring-line">
+    <div className="flex gap-4 rounded-xl bg-white p-5 ring-1 ring-line">
       <span className="flex h-11 w-11 shrink-0 items-center justify-center rounded-full bg-sand-light text-forest [&_svg]:h-5 [&_svg]:w-5">
         {icon}
       </span>

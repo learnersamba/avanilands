@@ -7,20 +7,22 @@
 Premium · professional · trustworthy · modern · land-focused · clean · easy · mobile-first.
 **Not** a classifieds look: no crowded grids of tiny ads, no "Post your ad" buttons, no seller names. It should feel like the official website of a serious land company.
 
-## 2. Visual language (placeholder until branding is final)
+## 2. Visual language (premium refresh, November 2026)
 
-| Element | Proposal |
-|---------|----------|
-| Primary colour | Deep forest green `#1F4D3A` — land, growth, stability |
-| Accent | Warm sand gold `#C8A15A` — premium, used sparingly (badges, lines, key buttons) |
-| Background | Soft off-white `#FAF8F3`; white cards; charcoal text `#1E2422` |
+| Element | Choice |
+|---------|--------|
+| Dark bands | Deep forest `#0F2C22` (hero, verification, footer); forest `#1A4535` for buttons and the contact band |
+| Accent | Brass `#B8925A`, used sparingly (lines, the plan drawing, ticks); brass dark `#7A5C28` for small text on light backgrounds |
+| Background | Cool sage-white `#F6F7F4`; white for alternate sections and cards; ink `#17201C`; muted `#56625C`; hairlines `#DDE2DA` |
 | Status colours | Available green · Reserved amber · Sold red. Bold, so a buyer sees them at a glance |
-| Headings | Elegant serif (e.g. *Fraunces* or *Playfair Display*) |
-| Body | Clean sans-serif (e.g. *Inter*), 16 px minimum on mobile |
+| Headings and prices | *Noto Serif Display*, light (300), slightly tightened. Has the rupee sign |
+| Body | *Anek Latin* (Ek Type, an Indian foundry; a Telugu sibling exists for a future Telugu site), 17 px |
+| Signature element | The home hero's land layout plan (boundary, roads, numbered plots, park, north arrow, scale bar) that draws itself once on load, with one plot picked out in brass. Respects "reduce motion" |
+| Labels | No all-caps labels above headings; sentence case throughout. Numbers only where content is a real sequence (the buying steps) |
+| Shapes | Corners: 6 px buttons and inputs, 12 px cards and photos. Hairline dividers instead of boxes for lists (why us, FAQ, values) |
 | Imagery | Large, real aerial/drone and ground photos of our land; no stock-photo people |
-| Shapes | Generous white space, 12–16 px rounded corners, thin gold dividers, soft shadows |
-| Icons | Simple line icons (area, road, compass for facing, water drop, bolt, shield for approval) |
-| Motion | Subtle fades and image zoom on hover; nothing flashy |
+| Icons | Lucide line icons at 1.5 stroke, brass dark |
+| Motion | One orchestrated moment (the plan). Otherwise only responses to the visitor: slow 3% photo zoom on card hover |
 
 ## 3. Key screens
 

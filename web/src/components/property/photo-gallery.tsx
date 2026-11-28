@@ -39,7 +39,7 @@ export function PhotoGallery({ photos }: { photos: GalleryPhoto[] }) {
 
   if (photos.length === 0) {
     return (
-      <div className="bg-contours flex aspect-[21/9] items-center justify-center rounded-2xl bg-forest text-sand-light">
+      <div className="bg-contours flex aspect-[21/9] items-center justify-center rounded-xl bg-forest text-sand-light">
         Photos coming soon
       </div>
     );
@@ -55,7 +55,7 @@ export function PhotoGallery({ photos }: { photos: GalleryPhoto[] }) {
         <button
           type="button"
           onClick={() => open(0)}
-          className="group overflow-hidden rounded-2xl lg:col-span-2 lg:row-span-2"
+          className="group overflow-hidden rounded-xl lg:col-span-2 lg:row-span-2"
           aria-label={`Open photo 1 of ${photos.length}: ${first.alt}`}
         >
           {/* eslint-disable-next-line @next/next/no-img-element */}
@@ -75,7 +75,7 @@ export function PhotoGallery({ photos }: { photos: GalleryPhoto[] }) {
             key={photo.id}
             type="button"
             onClick={() => open(i + 1)}
-            className="group overflow-hidden rounded-2xl"
+            className="group overflow-hidden rounded-xl"
             aria-label={`Open photo ${i + 2} of ${photos.length}: ${photo.alt}`}
           >
             {/* eslint-disable-next-line @next/next/no-img-element */}
@@ -110,7 +110,7 @@ export function PhotoGallery({ photos }: { photos: GalleryPhoto[] }) {
               key={photo.id}
               type="button"
               onClick={() => open(i)}
-              className="relative w-[88%] shrink-0 snap-center overflow-hidden rounded-2xl"
+              className="relative w-[88%] shrink-0 snap-center overflow-hidden rounded-xl"
               aria-label={`Open photo ${i + 1} of ${photos.length}: ${photo.alt}`}
             >
               {/* eslint-disable-next-line @next/next/no-img-element */}

@@ -17,7 +17,7 @@ export function PageHero({
 }) {
   return (
     <section className="bg-contours bg-forest-dark text-white">
-      <Container className="py-12 sm:py-16">
+      <Container className="py-14 sm:py-20">
         {crumbs.length > 0 && (
           <nav aria-label="Breadcrumb" className="mb-4 text-sm text-white/70">
             <ol className="flex flex-wrap items-center gap-2">
@@ -31,8 +31,8 @@ export function PageHero({
             </ol>
           </nav>
         )}
-        <h1 className="font-serif text-4xl leading-tight sm:text-5xl">{title}</h1>
-        {subtitle && <p className="mt-4 max-w-2xl text-lg text-white/80">{subtitle}</p>}
+        <h1 className="max-w-3xl font-serif text-[2.4rem] leading-[1.08] sm:text-[3.4rem]">{title}</h1>
+        {subtitle && <p className="mt-5 max-w-2xl text-lg leading-relaxed text-white/75">{subtitle}</p>}
         {children}
       </Container>
     </section>

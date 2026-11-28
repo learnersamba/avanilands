@@ -23,12 +23,12 @@ export function PropertyCard({
   const highlight = property.highlights[0];
   return (
     <article
-      className={`group flex flex-col overflow-hidden rounded-2xl border bg-white shadow-sm transition-shadow hover:shadow-lg ${
+      className={`group flex flex-col overflow-hidden rounded-xl border bg-white transition-[border-color,box-shadow] hover:shadow-[0_18px_40px_-24px_rgba(15,44,34,0.45)] ${
         property.availability === "sold"
           ? "border-sold/50 ring-1 ring-sold/30"
           : property.availability === "reserved"
             ? "border-reserved/50 ring-1 ring-reserved/30"
-            : "border-line"
+            : "border-line hover:border-forest/25"
       }`}
     >
       <div className="relative">
@@ -48,18 +48,18 @@ export function PropertyCard({
               fetchPriority={priority ? "high" : "auto"}
               width={400}
               height={300}
-              className="h-full w-full object-cover transition-transform duration-500 group-hover:scale-105"
+              className="h-full w-full object-cover transition-transform duration-700 group-hover:scale-[1.03]"
             />
           ) : (
-            <div className="bg-contours flex h-full items-center justify-center bg-forest text-sand-light">
+            <div className="bg-contours flex h-full items-center justify-center bg-forest-dark text-sm text-sand-light/80">
               No photo yet
             </div>
           )}
           <StatusRibbon status={property.availability} size="sm" />
           <div className={`absolute top-3 flex gap-2 ${property.availability === "available" ? "left-3" : "left-24"}`}>
             {property.is_featured && (
-              <span className="inline-flex items-center gap-1 rounded-full bg-sand px-2.5 py-1 text-[11px] font-semibold uppercase tracking-wide text-forest-dark">
-                <Star className="h-3 w-3 fill-current" aria-hidden /> Featured
+              <span className="inline-flex items-center gap-1 rounded-full bg-paper/95 px-2.5 py-1 text-xs font-medium text-forest-dark">
+                <Star className="h-3 w-3 fill-sand text-sand" aria-hidden /> Featured
               </span>
             )}
           </div>
@@ -76,40 +76,41 @@ export function PropertyCard({
       </div>
 
       <div className="flex flex-1 flex-col p-5">
-        <p className="text-xs font-medium uppercase tracking-wide text-muted">
-          {property.type_name} · {property.code}
+        <p className="flex justify-between gap-3 text-sm text-muted">
+          <span>{property.type_name}</span>
+          <span className="tabular-nums">{property.code}</span>
         </p>
-        <h3 className="mt-1.5 font-serif text-xl leading-snug text-ink">
+        <h3 className="mt-1.5 font-serif text-[1.35rem] leading-snug text-forest-dark">
           <Link href={`/land/${property.slug}`} className="hover:text-forest">
             {property.title}
           </Link>
         </h3>
         <p className="mt-2 flex items-center gap-1.5 text-sm text-ink/75">
-          <MapPin className="h-4 w-4 shrink-0 text-sand" aria-hidden />
+          <MapPin className="h-4 w-4 shrink-0 text-sand-dark" strokeWidth={1.5} aria-hidden />
           {place}
         </p>
         <p className="mt-1 flex items-center gap-1.5 text-sm text-ink/75">
-          <Ruler className="h-4 w-4 shrink-0 text-sand" aria-hidden />
+          <Ruler className="h-4 w-4 shrink-0 text-sand-dark" strokeWidth={1.5} aria-hidden />
           {formatArea(property.area_value, property.area_unit)}
           {sqft && <span className="text-muted">({sqft})</span>}
         </p>
         {highlight && (
           <p className="mt-1 flex items-center gap-1.5 text-sm text-ink/75">
-            <Sparkles className="h-4 w-4 shrink-0 text-sand" aria-hidden />
+            <Sparkles className="h-4 w-4 shrink-0 text-sand-dark" strokeWidth={1.5} aria-hidden />
             {highlight}
           </p>
         )}
-        <div className="mt-auto flex items-end justify-between gap-3 pt-5">
+        <div className="mt-auto flex items-end justify-between gap-3 border-t border-line pt-4 mt-5">
           <div>
             {property.price_type === "on_request" || property.price == null ? (
               <>
                 <p className="text-xs font-medium text-muted">Price</p>
-                <p className="whitespace-nowrap font-serif text-xl text-forest">
+                <p className="whitespace-nowrap font-serif text-xl text-forest-dark">
                   On request
                 </p>
               </>
             ) : (
-              <p className="font-serif text-2xl text-forest">
+              <p className="font-serif text-[1.7rem] leading-none text-forest-dark tabular-nums">
                 {formatRupeesShort(property.price)}
               </p>
             )}
@@ -119,7 +120,7 @@ export function PropertyCard({
           </div>
           <Link
             href={`/land/${property.slug}`}
-            className="inline-flex shrink-0 items-center gap-1 whitespace-nowrap text-sm font-semibold text-forest hover:gap-2 hover:text-forest-dark"
+            className="inline-flex shrink-0 items-center gap-1 whitespace-nowrap text-sm font-medium text-forest-dark transition-[gap] hover:gap-2"
             aria-label={`View details of ${property.title}`}
           >
             View details <ArrowRight className="h-4 w-4" aria-hidden />
@@ -138,7 +139,7 @@ export function PropertyGrid({
   priorityCount?: number;
 }) {
   return (
-    <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
+    <div className="grid gap-x-6 gap-y-8 sm:grid-cols-2 lg:grid-cols-3">
       {properties.map((property, index) => (
         <PropertyCard
           key={property.id}

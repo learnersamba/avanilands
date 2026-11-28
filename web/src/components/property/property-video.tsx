@@ -16,7 +16,7 @@ export function YouTubeVideo({ id, title }: { id: string; title: string }) {
         title={title}
         allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture"
         allowFullScreen
-        className="aspect-video w-full rounded-2xl"
+        className="aspect-video w-full rounded-xl"
       />
     );
   }
@@ -24,7 +24,7 @@ export function YouTubeVideo({ id, title }: { id: string; title: string }) {
     <button
       type="button"
       onClick={() => setPlaying(true)}
-      className="group relative block aspect-video w-full overflow-hidden rounded-2xl bg-ink"
+      className="group relative block aspect-video w-full overflow-hidden rounded-xl bg-ink"
       aria-label={`Play video: ${title}`}
     >
       {/* eslint-disable-next-line @next/next/no-img-element */}
@@ -44,7 +44,7 @@ export function YouTubeVideo({ id, title }: { id: string; title: string }) {
 
 export function UploadedVideo({ src, poster, title }: { src: string; poster?: string; title: string }) {
   return (
-    <video controls preload="none" poster={poster} className="aspect-video w-full rounded-2xl bg-ink" aria-label={title}>
+    <video controls preload="none" poster={poster} className="aspect-video w-full rounded-xl bg-ink" aria-label={title}>
       <source src={src} type="video/mp4" />
     </video>
   );

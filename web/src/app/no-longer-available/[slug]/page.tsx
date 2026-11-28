@@ -32,7 +32,7 @@ async function Content({ params }: { params: Promise<{ slug: string }> }) {
   return (
     <>
       <Container className="py-16 text-center">
-        <p className="text-xs font-semibold uppercase tracking-[0.2em] text-sand-dark">No longer available</p>
+        <p className="font-medium text-sand-dark">No longer available</p>
         <h1 className="mx-auto mt-4 max-w-2xl font-serif text-3xl text-forest sm:text-4xl">{route.title}</h1>
         <p className="mx-auto mt-4 max-w-xl text-ink/75">
           This property has been sold or withdrawn. Here is similar land in {route.city} — or tell us what you are

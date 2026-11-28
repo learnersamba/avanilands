@@ -30,10 +30,10 @@ export function escapeHtml(value: string): string {
 }
 
 export function layout(title: string, body: string): string {
-  return `<!doctype html><html><body style="margin:0;background:#faf8f3;font-family:Arial,Helvetica,sans-serif;color:#1e2422">
+  return `<!doctype html><html><body style="margin:0;background:#f6f7f4;font-family:Arial,Helvetica,sans-serif;color:#17201c">
 <table role="presentation" width="100%" cellpadding="0" cellspacing="0"><tr><td align="center" style="padding:24px">
 <table role="presentation" width="560" cellpadding="0" cellspacing="0" style="max-width:560px;background:#ffffff;border:1px solid #e4dfd3;border-radius:12px">
-<tr><td style="background:#1f4d3a;color:#ffffff;padding:18px 24px;border-radius:12px 12px 0 0;font-size:18px">${escapeHtml(title)}</td></tr>
+<tr><td style="background:#1a4535;color:#ffffff;padding:18px 24px;border-radius:12px 12px 0 0;font-size:18px">${escapeHtml(title)}</td></tr>
 <tr><td style="padding:24px;font-size:15px;line-height:1.6">${body}</td></tr>
 </table></td></tr></table></body></html>`;
 }
@@ -69,7 +69,7 @@ ${d.email ? row("Email", `<a href="mailto:${escapeHtml(d.email)}">${escapeHtml(d
 ${row("Prefers", contactLabel[d.preferredContact])}
 ${d.message ? row("Message", escapeHtml(d.message).replace(/\n/g, "<br>")) : ""}
 </table>
-${d.adminUrl ? `<p style="margin-top:20px"><a href="${escapeHtml(d.adminUrl)}/enquiries" style="background:#1f4d3a;color:#ffffff;padding:10px 18px;border-radius:8px;text-decoration:none">Open in the admin panel</a></p>` : ""}`,
+${d.adminUrl ? `<p style="margin-top:20px"><a href="${escapeHtml(d.adminUrl)}/enquiries" style="background:#1a4535;color:#ffffff;padding:10px 18px;border-radius:8px;text-decoration:none">Open in the admin panel</a></p>` : ""}`,
   );
   return { subject, text, html };
 }

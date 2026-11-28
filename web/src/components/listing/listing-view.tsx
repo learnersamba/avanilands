@@ -66,7 +66,7 @@ export async function ListingView({ filters }: { filters: ListingFilters }) {
 
 function EmptyResults({ filters, pageTooFar }: { filters: ListingFilters; pageTooFar: boolean }) {
   return (
-    <div className="rounded-2xl border border-dashed border-line bg-white px-6 py-16 text-center">
+    <div className="rounded-xl border border-dashed border-line bg-white px-6 py-16 text-center">
       <SearchX className="mx-auto h-10 w-10 text-sand" aria-hidden />
       <h3 className="mt-4 font-serif text-2xl text-forest">
         {pageTooFar ? "There are no more results" : "No land matches these filters"}
@@ -93,12 +93,12 @@ function EmptyResults({ filters, pageTooFar }: { filters: ListingFilters; pageTo
 export function ListingSkeleton() {
   return (
     <Container className="grid gap-8 py-10 lg:grid-cols-[290px_1fr]" aria-busy="true">
-      <div className="hidden h-[600px] animate-pulse rounded-2xl bg-white lg:block" />
+      <div className="hidden h-[600px] animate-pulse rounded-xl bg-white lg:block" />
       <div>
         <div className="mb-6 h-6 w-40 animate-pulse rounded bg-line" />
         <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
           {Array.from({ length: 6 }, (_, index) => (
-            <div key={index} className="h-[420px] animate-pulse rounded-2xl bg-white ring-1 ring-line" />
+            <div key={index} className="h-[420px] animate-pulse rounded-xl bg-white ring-1 ring-line" />
           ))}
         </div>
       </div>

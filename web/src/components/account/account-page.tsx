@@ -346,7 +346,7 @@ function Section({
   return (
     <section
       aria-labelledby={`section-${title}`}
-      className="rounded-2xl bg-white p-6 shadow-sm ring-1 ring-line"
+      className="rounded-xl bg-white p-6 shadow-sm ring-1 ring-line"
     >
       <h2
         id={`section-${title}`}
@@ -447,7 +447,7 @@ function ProfileCard() {
   return (
     <section
       aria-labelledby="profile-title"
-      className="h-fit rounded-2xl bg-white p-6 shadow-sm ring-1 ring-line"
+      className="h-fit rounded-xl bg-white p-6 shadow-sm ring-1 ring-line"
     >
       <h2 id="profile-title" className="font-serif text-2xl text-forest">
         Your details
@@ -655,7 +655,7 @@ function DeleteAccount({ onLeave }: { onLeave: () => void }) {
   const [error, setError] = useState<string | null>(null);
 
   return (
-    <section className="rounded-2xl border border-red-200 p-6">
+    <section className="rounded-xl border border-red-200 p-6">
       <h2 className="font-semibold text-ink">Delete account</h2>
       <p className="mt-1 text-sm text-ink/70">
         Removes your details and saved land. Enquiries and visits you sent stay

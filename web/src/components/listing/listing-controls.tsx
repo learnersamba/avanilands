@@ -15,7 +15,7 @@ export function FilterSidebar({ filters, options }: { filters: ListingFilters; o
   const [pending, startTransition] = useTransition();
   const current = toQueryString(filters);
   return (
-    <div className="rounded-2xl border border-line bg-white p-5">
+    <div className="rounded-xl border border-line bg-white p-5">
       <div className="mb-5 flex items-center justify-between">
         <h2 className="font-serif text-xl text-forest">Filters</h2>
         {pending && (

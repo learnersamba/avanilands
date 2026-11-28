@@ -152,7 +152,7 @@ async function PropertyContent({ params }: { params: Promise<{ slug: string }> }
         <Container className="pt-4">
           <div
             role="status"
-            className={`flex items-center gap-4 rounded-2xl px-5 py-4 text-white shadow-md ${
+            className={`flex items-center gap-4 rounded-xl px-5 py-4 text-white shadow-md ${
               p.availability === "reserved"
                 ? "bg-gradient-to-r from-reserved to-[#d97706] shadow-reserved/20"
                 : "bg-gradient-to-r from-sold to-[#e04848] shadow-sold/20"
@@ -166,7 +166,7 @@ async function PropertyContent({ params }: { params: Promise<{ slug: string }> }
               )}
             </span>
             <div>
-              <p className="text-base font-bold uppercase tracking-wide">
+              <p className="text-lg font-semibold">
                 {p.availability === "reserved" ? "Reserved" : "Sold"}
               </p>
               <p className="text-sm text-white/90">
@@ -330,14 +330,14 @@ async function PropertyContent({ params }: { params: Promise<{ slug: string }> }
                 </div>
               </>
             ) : (
-              <div className="bg-contours flex aspect-[16/9] flex-col items-center justify-center rounded-2xl bg-forest px-6 text-center text-white">
+              <div className="bg-contours flex aspect-[16/9] flex-col items-center justify-center rounded-xl bg-forest px-6 text-center text-white">
                 <MapPin className="h-10 w-10 text-sand" aria-hidden />
                 <p className="mt-3 font-serif text-xl">{place}</p>
                 <p className="mt-1 text-sm text-white/70">Map location not shared yet — ask us for directions.</p>
               </div>
             )}
             {page.nearby.length > 0 && (
-              <ul className="mt-6 divide-y divide-line rounded-2xl bg-white ring-1 ring-line">
+              <ul className="mt-6 divide-y divide-line rounded-xl bg-white ring-1 ring-line">
                 {page.nearby.map((place) => (
                   <li key={place.id} className="flex items-center justify-between px-5 py-3 text-sm">
                     <span>{place.name}</span>
@@ -349,7 +349,7 @@ async function PropertyContent({ params }: { params: Promise<{ slug: string }> }
           </Section>
 
           <Section title="Documents & approvals">
-            <div className="rounded-2xl bg-white p-5 ring-1 ring-line">
+            <div className="rounded-xl bg-white p-5 ring-1 ring-line">
               <p className="font-medium">{approvalLabels[p.approval_type] ?? p.approval_type}
                 {p.approval_number && <span className="text-muted"> · {p.approval_number}</span>}
               </p>
@@ -382,7 +382,7 @@ async function PropertyContent({ params }: { params: Promise<{ slug: string }> }
         <aside id="enquire" className="scroll-mt-24 lg:sticky lg:top-24 lg:self-start" aria-label="Contact about this property">
           <span id="visit" className="block scroll-mt-24" aria-hidden />
           <div
-            className={`rounded-2xl bg-white p-6 shadow-sm ring-1 ring-line ${
+            className={`rounded-xl bg-white p-6 shadow-sm ring-1 ring-line ${
               p.availability === "sold"
                 ? "border-t-4 border-sold"
                 : p.availability === "reserved"
@@ -515,10 +515,10 @@ function Section({ title, children }: { title: string; children: ReactNode }) {
 function Fact({ icon, label, value, note }: { icon: ReactNode; label: string; value: string; note?: string }) {
   return (
     <div className="rounded-xl bg-white p-4 ring-1 ring-line">
-      <dt className="flex items-center gap-2 text-xs font-medium uppercase tracking-wide text-muted [&_svg]:h-4 [&_svg]:w-4 [&_svg]:text-sand">
+      <dt className="flex items-center gap-2 text-sm text-muted [&_svg]:h-4 [&_svg]:w-4 [&_svg]:text-sand-dark">
         {icon} {label}
       </dt>
-      <dd className="mt-1.5 font-semibold text-ink">{value}</dd>
+      <dd className="mt-1.5 font-medium text-ink">{value}</dd>
       {note && <dd className="text-xs text-muted">{note}</dd>}
     </div>
   );
@@ -532,16 +532,16 @@ function PropertySkeleton() {
         <div className="h-5 w-64 animate-pulse rounded bg-line" />
       </Container>
       <Container className="pt-6">
-        <div className="aspect-[4/3] w-full animate-pulse rounded-2xl bg-line lg:aspect-[21/9]" />
+        <div className="aspect-[4/3] w-full animate-pulse rounded-xl bg-line lg:aspect-[21/9]" />
       </Container>
       <Container className="grid gap-10 py-10 lg:grid-cols-[1fr_380px]">
         <div className="space-y-6">
           <div className="h-10 w-3/4 animate-pulse rounded bg-line" />
           <div className="h-6 w-1/2 animate-pulse rounded bg-line" />
           <div className="h-12 w-1/3 animate-pulse rounded bg-line" />
-          <div className="h-[1400px] animate-pulse rounded-2xl bg-white ring-1 ring-line" />
+          <div className="h-[1400px] animate-pulse rounded-xl bg-white ring-1 ring-line" />
         </div>
-        <div className="hidden h-[520px] animate-pulse rounded-2xl bg-white ring-1 ring-line lg:block" />
+        <div className="hidden h-[520px] animate-pulse rounded-xl bg-white ring-1 ring-line lg:block" />
       </Container>
     </div>
   );

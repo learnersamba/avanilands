@@ -8,13 +8,13 @@ import { digits, whatsappLink } from "@/lib/format";
 export async function ContactBand() {
   const settings = await getSiteSettings();
   return (
-    <section className="bg-contours bg-forest py-16 text-white" aria-labelledby="contact-band-title">
+    <section className="bg-contours bg-forest py-20 text-white" aria-labelledby="contact-band-title">
       <Container className="flex flex-col items-start justify-between gap-8 lg:flex-row lg:items-center">
         <div className="max-w-xl">
-          <h2 id="contact-band-title" className="font-serif text-3xl sm:text-4xl">
+          <h2 id="contact-band-title" className="font-serif text-[2rem] leading-tight sm:text-[2.6rem]">
             Found something you like?
           </h2>
-          <p className="mt-3 text-white/80">
+          <p className="mt-4 text-lg text-white/75">
             Call, WhatsApp or send an enquiry. We reply the same day and can show you the land this week.
           </p>
         </div>

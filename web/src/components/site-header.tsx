@@ -28,13 +28,13 @@ export function Logo({
   return (
     <Link href="/" className="flex items-center gap-2.5" aria-label={`${name} home`}>
       <svg viewBox="0 0 32 32" className="h-9 w-9" aria-hidden>
-        <circle cx="16" cy="16" r="16" className={light ? "fill-white/10" : "fill-forest"} />
+        <circle cx="16" cy="16" r="16" className={light ? "fill-white/10" : "fill-forest-dark"} />
         <path d="M5 22 L12 13 L16 18 L20 11 L27 22 Z" className="fill-sand" />
         <path d="M5 22 H27" className="stroke-sand-light" strokeWidth="1.5" />
       </svg>
       <span className="flex flex-col">
         <span
-          className={`font-serif text-lg font-semibold uppercase leading-none tracking-[0.12em] sm:text-xl ${light ? "text-white" : "text-forest"}`}
+          className={`font-serif text-lg !font-normal uppercase leading-none tracking-[0.16em] sm:text-xl ${light ? "text-white" : "text-forest-dark"}`}
         >
           {name}
         </span>
@@ -53,12 +53,12 @@ export function Logo({
 export async function SiteHeader() {
   const settings = await getSiteSettings();
   return (
-    <header className="sticky top-0 z-40 border-b border-line/80 bg-paper/95 backdrop-blur">
-      <Container className="flex h-16 items-center justify-between gap-6">
+    <header className="sticky top-0 z-40 border-b border-line bg-paper/90 backdrop-blur-md">
+      <Container className="flex h-[4.25rem] items-center justify-between gap-6">
         <Logo name={settings.company_name} descriptor={settings.descriptor} />
         <nav aria-label="Main" className="hidden items-center gap-8 md:flex">
           {navLinks.map((link) => (
-            <Link key={link.href} href={link.href} className="py-2 text-sm font-medium text-ink/80 hover:text-forest">
+            <Link key={link.href} href={link.href} className="py-2 text-[0.95rem] text-ink/75 transition-colors hover:text-forest-dark">
               {link.label}
             </Link>
           ))}
@@ -67,7 +67,7 @@ export async function SiteHeader() {
           {settings.phone && (
             <a
               href={`tel:+${digits(settings.phone)}`}
-              className="hidden items-center gap-2 text-sm font-semibold text-forest lg:inline-flex"
+              className="mr-3 hidden items-center gap-2 text-[0.95rem] font-medium text-forest-dark tabular-nums lg:inline-flex"
             >
               <Phone className="h-4 w-4" aria-hidden /> {settings.phone}
             </a>
@@ -77,7 +77,7 @@ export async function SiteHeader() {
               href={whatsappLink(settings.whatsapp, "Hello, I'd like to know about your land.")}
               target="_blank"
               rel="noopener"
-              className="hidden rounded-lg bg-sand px-4 py-2 text-sm font-semibold text-forest-dark hover:bg-[#b8914c] sm:inline-flex"
+              className="hidden rounded-md bg-forest-dark px-4 py-2 text-[0.95rem] font-medium text-white hover:bg-forest sm:inline-flex"
             >
               Talk to us
             </a>

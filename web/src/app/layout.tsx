@@ -1,6 +1,6 @@
 import type { Metadata, Viewport } from "next";
 import { Suspense } from "react";
-import { Fraunces, Inter } from "next/font/google";
+import { Anek_Latin, Noto_Serif_Display } from "next/font/google";
 
 import { AccountProvider } from "@/components/account/account-provider";
 import { CompareTray } from "@/components/compare/compare-tray";
@@ -16,9 +16,16 @@ import { organizationJsonLd } from "@/lib/structured-data";
 
 import "./globals.css";
 
-const inter = Inter({ variable: "--font-inter", subsets: ["latin"], display: "swap" });
-// Headings use one weight, so only that file is downloaded.
-const fraunces = Fraunces({ variable: "--font-fraunces", subsets: ["latin"], weight: "400", display: "swap" });
+// Body: Anek Latin (Ek Type, an Indian foundry; it has a Telugu sibling for later).
+// Headings and prices: Noto Serif Display, light and regular only.
+// "latin-ext" carries the rupee sign (₹); browsers fetch it only when it is used.
+const body = Anek_Latin({ variable: "--font-body", subsets: ["latin", "latin-ext"], display: "swap" });
+const display = Noto_Serif_Display({
+  variable: "--font-display",
+  subsets: ["latin", "latin-ext"],
+  weight: ["300", "400"],
+  display: "swap",
+});
 
 export async function generateMetadata(): Promise<Metadata> {
   const settings = await getSiteSettings();
@@ -35,12 +42,12 @@ export async function generateMetadata(): Promise<Metadata> {
   };
 }
 
-export const viewport: Viewport = { themeColor: "#1f4d3a" };
+export const viewport: Viewport = { themeColor: "#0f2c22" };
 
 export default async function RootLayout({ children }: LayoutProps<"/">) {
   const settings = await getSiteSettings();
   return (
-    <html lang="en-IN" className={`${inter.variable} ${fraunces.variable} h-full antialiased`}>
+    <html lang="en-IN" className={`${body.variable} ${display.variable} h-full antialiased`}>
       <body className="flex min-h-full flex-col">
         <a
           href="#main"
